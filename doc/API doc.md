@@ -51,7 +51,7 @@
 
 | Endpoint                          | Method   |
 | --------------------------------- | -------- |
-| [changeUserInfo](#changeUserInfo) | `PUT`    |
+| [changeUserInfo](#changeuserinfo) | `PUT`    |
 | [favoriteDelete](#favoriteDelete) | `DELETE` |
 | [favoriteInsert](#favoriteInsert) | `POST`   |
 | [getFavorite](#getFavorite)       | `GET`    |
@@ -63,7 +63,7 @@
 | [updateVideo](#updateVideo)       | `PUT`    |
 | [userInsert](#userInsert)         | `POST`   |
 
-<h4 id='changeUserInfo'> changeUserInfo </h4>
+#### changeUserInfo
 
 - Description
   
@@ -86,7 +86,7 @@
   }
   ```
 
-<h4 id='favoriteDelete'> favoriteDelete </h4>
+#### favoriteDelete
 
 - Description
   
@@ -106,7 +106,7 @@
   }
   ```
 
-<h4 id='favoriteInsert'> favoriteInsert </h4>
+#### favoriteInsert 
 
 - Description
   
@@ -126,7 +126,7 @@
   }
   ```
 
-<h4 id='getFavorite'> getFavorite </h4>
+#### getFavorite
 
 - Description
   
@@ -161,7 +161,7 @@
   }
   ```
 
-<h4 id='getUserInfo'> getUserInfo </h4>
+#### getUserInfo 
 
 - Description
 
@@ -188,7 +188,7 @@
   }
   ```
 
-<h4 id='getWeeklyBest'> getWeeklyBest </h4>
+#### getWeeklyBest
 
 - Description
 
@@ -223,7 +223,7 @@
   }
   ```
 
-<h4 id='sortTrending'> sortTrending </h4>
+#### sortTrending
 
 - Description
   
@@ -262,7 +262,7 @@
   }
   ```
 
-<h4 id='topTen'> topTen </h4>
+#### topTen
 
 - Description
   
@@ -294,7 +294,7 @@
   }
   ```
 
-<h4 id='userInsert'> userInsert </h4>
+#### userInsert
 
 - Description
   
