@@ -1,17 +1,18 @@
 import mysql.connector
+import yaml
 
-def get_connection():
+def get_connection(database_config):
     cnx = mysql.connector.connect(
-        host="mysql-database.cvz0vt1mykn7.us-east-2.rds.amazonaws.com",
-        user="admin",
-        password="edgerunners",
-        database="youtube",
-        port="3306"
+        host = database_config["host"],
+        user = database_config["user"],
+        password = database_config["password"],
+        database = database_config["database"],
+        port = database_config["port"]
     )
     return cnx
 
 def query(query):
-    cnx = get_connection()
+    cnx = get_connection(yaml.safe_load(open("/opt/config.yaml"))["database"])
     cursor = cnx.cursor()
     cnx.start_transaction
     cursor.execute(query)
