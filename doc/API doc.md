@@ -18,6 +18,26 @@
 }
 ```
 
+### Response body
+- `GET` success response body
+  ```json
+  {
+    "data": [data_item 1, data_item 2, ...]
+  }
+  ```
+- Other success response body
+  ```json
+  {
+    "message": "success"
+  }
+  ```
+- Failed response body
+  ```json
+  {
+    "error_message": "error message"
+  }
+  ```
+
 ### Base URL
 
 `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/dev/`
@@ -29,7 +49,44 @@
 
 ### List of API endpoints
 
-#### favoriteDelete
+| Endpoint                          | Method   |
+| --------------------------------- | -------- |
+| [changeUserInfo](#changeUserInfo) | `PUT`    |
+| [favoriteDelete](#favoriteDelete) | `DELETE` |
+| [favoriteInsert](#favoriteInsert) | `POST`   |
+| [getFavorite](#getFavorite)       | `GET`    |
+| [getUserInfo](#getUserInfo)       | `GET`    |
+| [getWeeklyBest](#getWeeklyBest)   | `GET`    |
+| [sortTrending](#sortTrending)     | `GET`    |
+| [topTen](#topTen)                 | `GET`    |
+| [searchVideo](#searchVideo)       | `GET`    |
+| [updateVideo](#updateVideo)       | `PUT`    |
+| [userInsert](#userInsert)         | `POST`   |
+
+<h4 id='changeUserInfo'> changeUserInfo </h4>
+
+- Description
+  
+  Update user info with `UserId`
+- Type: `PUT`
+- Sample request body
+  ```json
+  {
+    "UserId": 2,
+    "Password": "bbbbronya", [Not required]
+    "UserName": "114514", [Not required]
+    "Gender": "Male", [Not required]
+    "Avatar": "" [Not required]
+  }
+  ```
+- Sample response body
+  ```json
+  {
+    "message": "success"
+  }
+  ```
+
+<h4 id='favoriteDelete'> favoriteDelete </h4>
 
 - Description
   
@@ -49,7 +106,7 @@
   }
   ```
 
-#### favoriteInsert
+<h4 id='favoriteInsert'> favoriteInsert </h4>
 
 - Description
   
@@ -69,18 +126,16 @@
   }
   ```
 
-#### sortTrending
+<h4 id='getFavorite'> getFavorite </h4>
+
 - Description
   
-  Sort and filter trending videos based on criteria
+  Get all favorite videos for a given `UserId`
 - Type: `GET`
 - Sample request body
   ```json
   {
-    "CategoryId": 10,
-    "Region": "JP",
-    "ChannelId": "UCxIK6x6sG7Ln5vjjPYpgeAw",
-    "SortBy": "likes"
+    "UserId": "3"
   }
   ```
 - Sample response body
@@ -89,6 +144,7 @@
     "data": [
         [
             "z-_vxDY1Gu0",
+            3,
             "JP",
             "【超学生×四季凪アキラ】威風堂々 @歌ってみた",
             "2023-10-12 10:00:09",
@@ -105,7 +161,109 @@
   }
   ```
 
-#### topTen
+<h4 id='getUserInfo'> getUserInfo </h4>
+
+- Description
+
+  Get user info for given `UserId` 
+- Type: `GET`
+- Sample request body
+  ```json
+  {
+    "UserId": "2"
+  }
+  ```
+- Sample response body
+  ```json
+  {
+    "data": [
+        [
+            2,
+            "bbbbronya",
+            "114514",
+            "Male",
+            null
+        ]
+    ]
+  }
+  ```
+
+<h4 id='getWeeklyBest'> getWeeklyBest </h4>
+
+- Description
+
+  Get weekly best videos for a given `Week`
+- Type: `GET`
+- Sample request body
+  ```json
+  {
+    "Week": "2023-10-15 00:00:00"
+  }
+  ```
+- Sample response body
+  ```json
+  {
+    "data": [
+        [
+            "r105CzDvoo0",
+            "2023-10-15 00:00:00",
+            "JP",
+            "milet「Anytime Anywhere」MUSIC VIDEO (TVアニメ『葬送のフリーレン』エンディングテーマ)",
+            "2023-10-06 13:00:09",
+            23182,
+            "2023-10-11 00:00:00",
+            1739109,
+            "https://i.ytimg.com/vi/r105CzDvoo0/default.jpg",
+            23182,
+            1739109,
+            "UCpgxgkifUGSKg9dNFE5Vo7Q",
+            10
+        ]
+    ]
+  }
+  ```
+
+<h4 id='sortTrending'> sortTrending </h4>
+
+- Description
+  
+  Sort trending videos from past week by `Likes` or `ViewCount` and filter by `CategoryId`, `Region`, and `ChannelId`. 
+- Type: `GET`
+- Sample request body
+  ```json
+  {
+    "CategoryId": 10, [Not required]
+    "Region": "JP", [Not required]
+    "ChannelId": "UCpgxgkifUGSKg9dNFE5Vo7Q", [Not required]
+    "SortBy": "likes",  [Likes or ViewCount]
+    "PageNum": 0,  [Not required]
+    "VideoPerPage": 10  [Not required]
+  }
+  ```
+- Sample response body
+  ```json
+  {
+    "data": [
+        [
+            "r105CzDvoo0",
+            "JP",
+            "milet「Anytime Anywhere」MUSIC VIDEO (TVアニメ『葬送のフリーレン』エンディングテーマ)",
+            "2023-10-06 13:00:09",
+            23182,
+            "2023-10-11 00:00:00",
+            1739109,
+            "https://i.ytimg.com/vi/r105CzDvoo0/default.jpg",
+            23182,
+            1739109,
+            "UCpgxgkifUGSKg9dNFE5Vo7Q",
+            10
+        ]
+    ]
+  }
+  ```
+
+<h4 id='topTen'> topTen </h4>
+
 - Description
   
   Get top ten `VideoId` or `ChannelId` based on `CategoryId` and `Region` for today
@@ -113,10 +271,10 @@
 - Sample request body
   ```json
   {
-    "SelectedColumn": "VideoId",
+    "SelectedColumn": "Title", [Title or ChannelId]
     "CategoryId": 10,
     "Region": "JP",
-    "SortBy": "likes"
+    "SortBy": "likes" [Likes or ViewCount]
   }
   ```
 - Sample response body
@@ -124,62 +282,36 @@
   {
     "data": [
         [
-            "SR89b0qqRAg"
+            "SEKAI NO OWARI「最高到達点」ONE PIECE リリックMV"
         ],
         [
-            "WKRoCuL9pgA"
+            "【号泣の最終回…】フランスストリートピアノの旅????????の最終日に愛の讃歌弾いたら…【海外ストリートピアノ/publicpiano/Hymne à l'amour/Édith Piaf】"
         ],
         [
-            "wdm2t8pTp7Y"
+            "King & Prince 「愛し生きること / MAGIC WORD」【初回限定盤A】「愛し生きること」 Music Video Shooting Behind the scenes Teaser"
         ]
     ]
   }
   ```
 
-#### videoQuery
+<h4 id='userInsert'> userInsert </h4>
+
 - Description
   
-  Get top 50 videos for `Region` sorted by `ViewCount` or `Likes` from the past week
-- Type: `GET`
+  Insert into `UserInfo` with values of user info
+- Type: `POST`
 - Sample request body
   ```json
   {
-    "Region": "JP",
-    "SortBy": "likes"
+    "Password": "wakuwaku",
+    "UserName": "Aniya",
+    "Gender": "Female", [Not required]
+    "Avatar": "https://userpic.codeforces.org/318350/title/e053dcf9c9751cd7.jpg" [Not required]
   }
   ```
 - Sample response body
   ```json
   {
-    "data": [
-        [
-            "zS1jKIsAOmM",
-            "JP",
-            "NCT U 'The BAT' Archiving Video",
-            "2023-08-29 14:38:57",
-            140133,
-            "2023-08-30 00:00:00",
-            677026,
-            "https://i.ytimg.com/vi/zS1jKIsAOmM/default.jpg",
-            140133,
-            677026,
-            "UCwgtORdDtUKhpjE1VBv6XfA",
-            10
-        ],
-        [
-            "OIBODIPC_8Y",
-            "JP",
-            "YOASOBI「勇者」 Official Music Video／TVアニメ『葬送のフリーレン』オープニングテーマ",
-            "2023-09-29 14:00:07",
-            132074,
-            "2023-09-30 00:00:00",
-            1738367,
-            "https://i.ytimg.com/vi/OIBODIPC_8Y/default.jpg",
-            132074,
-            1738367,
-            "UCvpredjG93ifbCP1Y77JyFA",
-            10
-        ]
-    ]
+    "message": "success"
   }
   ```
