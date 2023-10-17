@@ -4,18 +4,23 @@ from sql_query import query
 def lambda_handler(event, context):
     try:
         req = json.loads(event["body"])
-        SelectedColumn = req["SelectedColumn"]
-        CategoryId = req["CategoryId"]
-        Region =  req["Region"]
-        SortBy = req["SortBy"]
+        SelectedColumn = req.get("SelectedColumn")
+        CategoryId = req.get("CategoryId")
+        Region =  req.get("Region")
+        SortBy = req.get("SortBy")
     
-        if SelectedColumn.lower() not in ['videoid', 'channelid']:
-            raise ValueError(f"Invalid select column: {SelectedColumn}")
+        assert CategoryId is not None, "CategoryId is empty"
+        assert Region is not None, "Region is empty"
+        assert SelectedColumn.lower() in ['title', 'channeltitle'], f"Invalid select column: {SelectedColumn}"
+        assert SortBy.lower() in ['viewcount', 'likes'], f"Invalid sort column: {SortBy}"
+        
+        category = query(f"select CategoryId from Category where CategoryId = {CategoryId}")
+        assert len(category) > 0, "Category with CategoryId does not exist"
+        
+        region = query(f"select Region from Video where Region = '{Region}'")
+        assert len(region) > 0, "Region does not exist"
     
-        if SortBy.lower() not in ['viewcount', 'likes']:
-            raise ValueError(f"Invalid sort column: {SortBy}")
-    
-        result = query(f"select {SelectedColumn} from Video where CategoryId = '{CategoryId}' and Region = '{Region}' and TrendingDate = (select max(TrendingDate) from Video) order by {SortBy} DESC limit 10")
+        result = query(f"select {SelectedColumn} from Video natural join Channel where CategoryId = '{CategoryId}' and Region = '{Region}' and TrendingDate = (select max(TrendingDate) from Video) order by {SortBy} DESC limit 10")
 
         return {
           "isBase64Encoded" : True,

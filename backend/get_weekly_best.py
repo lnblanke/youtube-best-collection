@@ -4,13 +4,16 @@ from sql_query import query
 def lambda_handler(event, context):
     try:
         req = json.loads(event["body"])
-        Region, SortBy = req["Region"], req["SortBy"]
         
-        if SortBy.lower() not in ['viewcount', 'likes']:
-            raise ValueError(f"Invalid sort column: {SortBy}")
+        Week = req.get("Week")
+
+        assert Week is not None, "Week is empty"
         
-        result = query(f"select * from Video where Region = '{Region}' order by {SortBy} DESC limit 50")
+        w = query(f"select Week from WeeklyBest where Week = timestamp('{Week}')")
+        assert len(w) > 0, "Week does not exist"
         
+        result = query(f"select * from WeeklyBest natural join Video where Week = timestamp('{Week}')")
+
         return {
           "isBase64Encoded" : True,
           "statusCode": 200,
