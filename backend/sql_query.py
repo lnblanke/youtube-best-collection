@@ -12,7 +12,7 @@ def get_connection(database_config):
     return cnx
 
 def query(query):
-    cnx = get_connection(yaml.safe_load(open("/opt/config.yaml"))["database"])
+    cnx = get_connection(yaml.safe_load(open("config.yaml"))["database"])
     cursor = cnx.cursor()
     cnx.start_transaction
     cursor.execute(query)
