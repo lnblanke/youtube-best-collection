@@ -3,40 +3,11 @@ from datetime import datetime, timedelta
 import os
 import pandas as pd
 import json
-import mysql.connector
+from sql_query import query
 from time import time
 import yaml
 
-def get_connection(database_config):
-    cnx = mysql.connector.connect(
-        host = database_config["host"],
-        user = database_config["user"],
-        password = database_config["password"],
-        database = database_config["database"],
-        port = database_config["port"]
-    )
-    return cnx
-
-def query(cnx, query):
-    cursor = cnx.cursor()
-    cnx.start_transaction
-
-    try:
-        cursor.execute(query)
-        select = (query[:6] == "select")
-
-        if select:
-            result = cursor.fetchall()
-    except Exception as e:
-        cnx.rollback()
-        raise e
-    
-    cnx.commit()
-    cursor.close()
-
-    return result if select else None
-
-def update_category(cnx):
+def update_category():
     for _, _, files in os.walk("./data/"):
         for file in files:
             if file[-4:] == "json":
@@ -50,9 +21,9 @@ def update_category(cnx):
                         update_query += f"({id}, '{title}'),";
                             
                     if update_query != "":
-                        query(cnx, f"insert ignore into Category(CategoryId, CategoryName) values " + update_query[:-1])
+                        query(f"insert ignore into Category(CategoryId, CategoryName) values " + update_query[:-1])
 
-def update_videos(cnx, time):
+def update_videos(time):
     for _, _, files in os.walk("./data/"):
         for file in files:
             if file[-3:] == "csv":
@@ -93,19 +64,19 @@ def update_videos(cnx, time):
                         insert_tags += f"('{row.video_id}', \"{tag}\"),"
 
                 if insert_channel != "":
-                    query(cnx, "insert ignore into Channel(ChannelId, ChannelTitle) values " + insert_channel[:-1])
+                    query("insert ignore into Channel(ChannelId, ChannelTitle) values " + insert_channel[:-1])
 
                 if insert_videos != "":
-                    query(cnx, "replace into Video(VideoId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, ChannelId, CategoryId) values " + insert_videos[:-1])
+                    query("replace into Video(VideoId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, ChannelId, CategoryId) values " + insert_videos[:-1])
 
                 if delete_videos != "":
-                    query(cnx, f"delete from TagOf where VideoId in ({delete_videos[:-1]})")
+                    query(f"delete from TagOf where VideoId in ({delete_videos[:-1]})")
 
                 if insert_tags != "":
-                    query(cnx, "insert ignore into TagOf(VideoId, Tag) values " + insert_tags[:-1])
+                    query("insert ignore into TagOf(VideoId, Tag) values " + insert_tags[:-1])
 
-def update(cnx):
-    time = query(cnx, "select max(UpdateTime) from Config where UpdateItem = 'Video' and Status <> 'F'")[0][0]
+def update():
+    time = query("select max(UpdateTime) from Config where UpdateItem = 'Video' and Status <> 'F'")[0][0]
 
     if time is None:
         time = datetime.strptime("2023-09-01 00:00:00", "%Y-%m-%d %H:%M:%S")
@@ -114,31 +85,28 @@ def update(cnx):
         return
     
     cur_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    query(cnx, f"insert into Config(UpdateItem, UpdateTime, Status) values ('Video', timestamp('{cur_time}'), 'I')")
+    query(f"insert into Config(UpdateItem, UpdateTime, Status) values ('Video', timestamp('{cur_time}'), 'I')")
 
     try:    
-        for _, _, files in os.walk("./data/"):
-            for file in files:
-                os.remove("./data/" + file)
-        os.rmdir("./data/")
         kaggle.api.authenticate()
         kaggle.api.dataset_download_files('rsrishav/youtube-trending-video-dataset', 
                                           path = './data/', unzip = True)
         
-        update_category(cnx)
-        update_videos(cnx, time)
+        update_category()
+        update_videos(time)
+
+        for _, _, files in os.walk("./data/"):
+            for file in files:
+                os.remove("./data/" + file)
+        os.rmdir("./data/")
     except Exception as e:
-        query(cnx, f"update Config set Status = 'F' where UpdateItem = 'Video' and UpdateTime = timestamp('{cur_time}')")
+        query(f"update Config set Status = 'F' where UpdateItem = 'Video' and UpdateTime = timestamp('{cur_time}')")
         raise e
 
-    query(cnx, f"update Config set Status = 'S' where UpdateItem = 'Video' and UpdateTime = timestamp('{cur_time}')")
+    query(f"update Config set Status = 'S' where UpdateItem = 'Video' and UpdateTime = timestamp('{cur_time}')")
 
 if __name__ == "__main__":
     ts = time()
-    config = yaml.safe_load(open("config.yaml"))
-
-    cnx = get_connection(config["database"])
-
-    update(cnx)
+    update()
 
     print((time() - ts)/60)
