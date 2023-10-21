@@ -241,7 +241,7 @@
     "Prompt": "YOASOBI anime music",
     "CategoryId": 10,  [Not required]
     "Region": "JP",  [Not required]
-    "SortBy": "likes",  [Likes | ViewCount | PublishedAt | TrendingDate | Relevence]
+    "SortBy": "relevance",  [Likes | ViewCount | PublishedAt | TrendingDate | Relevance]
     "PageNum": 0, [Not required, default: 0]
     "VideoPerPage": 5  [Not required, default: 20]
   }
@@ -254,7 +254,7 @@
     "data": [
         [
             "HPtq8YK8fDQ",
-            2, 
+            "1.6368",
             "JP",
             "青のすみか (Live in Blue) / キタニタツヤ - Where Our Blue Is (Live in Blue) / Tatsuya Kitani",
             "2023-08-24 12:00:08",
@@ -269,7 +269,7 @@
         ],
         [
             "-QKk9pKCufs",
-            1,
+            "0.9670",
             "JP",
             "【未公開映像】EXPO Behind the scenes vol.1 ｜NHK MUSIC EXPO 2023 | NHK",
             "2023-09-14 03:56:38",
@@ -284,7 +284,7 @@
         ],
         [
             "1z-_XtdtMwk",
-            1,
+            "0.9670",
             "JP",
             "Sexy Zone ｢本音と建前｣ (YouTube Ver.)",
             "2023-08-23 12:00:12",
@@ -298,23 +298,8 @@
             10
         ],
         [
-            "8BU6LMzMquU",
-            1,
-            "JP",
-            "【難易度SSS】 Adoさんご本人に『唱』の歌い方を教えてもらいまSHOW。【ユニバーサル･スタジオ･ジャパン「ゾンビ・デ・ダンス」新テーマソング】",
-            "2023-09-19 09:00:07",
-            21018,
-            "2023-09-20 00:00:00",
-            464667,
-            "https://i.ytimg.com/vi/8BU6LMzMquU/default.jpg",
-            21018,
-            464667,
-            "UCbVQGCsMcqC3q7OtX8iXy9Q",
-            10
-        ],
-        [
             "DxyZt6CqGe0",
-            1,
+            "0.9670",
             "JP",
             "Sexy Zone「本音と建前」@CDTV ライブ! ライブ!",
             "2023-10-04 03:00:06",
@@ -325,6 +310,21 @@
             0,
             609122,
             "UCgXJMvOBqHk5wJFRKZfIgWQ",
+            10
+        ],
+        [
+            "mctEybOqY6s",
+            "0.9670",
+            "JP",
+            "勇者",
+            "2023-09-28 10:00:44",
+            17060,
+            "2023-09-29 00:00:00",
+            268215,
+            "https://i.ytimg.com/vi/mctEybOqY6s/default.jpg",
+            17060,
+            268215,
+            "UCI6B8NkZKqlFWoiC_xE-hzA",
             10
         ]
     ]

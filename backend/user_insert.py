@@ -13,6 +13,12 @@ def lambda_handler(event, context):
         assert Password is not None, "Password is empty"
         assert UserName is not None and UserName != "", "UserName is empty"
 
+        assert not any(c in UserName for c in "\"'()[]\{\}"), "UserName contains invalid character"
+        assert not any(c in Password for c in "\"'()[]\{\}"), "Password contains invalid character"
+
+        username = query(f"select UserName from UserInfo where UserName = '{UserName}'")
+        assert len(username) == 0, "User with UserName already exists"
+
         update_cols = ["Password", "UserName"]
         update_items = [f"'{Password}'", f"'{UserName}'"]
 
