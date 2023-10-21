@@ -17,6 +17,12 @@ def lambda_handler(event, context):
         
         assert len(user) > 0, "User with UserId is not found"
 
+        assert not any(c in UserName for c in "\"'()[]\{\}"), "UserName contains invalid character"
+        assert not any(c in Password for c in "\"'()[]\{\}"), "Password contains invalid character"
+
+        username = query(f"select UserName from UserInfo where UserName = '{UserName}'")
+        assert len(username) == 0, "User with UserName already exists"
+
         update_cols = []
 
         if Password:

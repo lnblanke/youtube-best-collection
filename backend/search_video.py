@@ -23,9 +23,16 @@ def lambda_handler(event, context):
         tags = query(f"select Tag from Tag where Tag in ({', '.join(list_tags)})")
         tags = [f"'{tag[0]}'" for tag in tags]
 
-        sql = f"select * from (select VideoId, count(distinct Tag) as Relevence from TagOf to2 where Tag in ({', '.join(tags)}) group by VideoId) as t1 natural join Video"
+        video_counts = query(f"select count(distinct VideoId) from TagOf where Tag in ({', '.join(tags)})")
+        max_videos = max([count[0] for count in video_counts])
+        num_videos = sum([count[0] for count in video_counts])
 
-        assert SortBy.lower() in ['viewcount', 'likes', 'relevence', 'publishedat', 'trendingdate'], f"Invalid sort column: {SortBy}"
+        query(f"drop view if exists Factor")
+        query(f"create view Factor as (select Tag, ({max_videos} - count(distinct VideoId)) / {num_videos} as Importance from TagOf group by Tag)")
+
+        sql = f"select * from (select VideoId, sum(Importance) as Relevance from TagOf to2 natural join Factor where Tag in ({', '.join(tags)}) group by VideoId) as t1 natural join Video"
+
+        assert SortBy.lower() in ['viewcount', 'likes', 'relevance', 'publishedat', 'trendingdate'], f"Invalid sort column: {SortBy}"
     
         if CategoryId:
             sql += f" where CategoryId = {CategoryId}"
