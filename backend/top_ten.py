@@ -1,9 +1,10 @@
 import json
-from sql_query import query
+from utils import query, get_request_body
 
 def lambda_handler(event, context):
+    result, error = None, None
     try:
-        req = json.loads(event["body"])
+        req = event["queryStringParameters"]
         SelectedColumn = req.get("SelectedColumn")
         CategoryId = req.get("CategoryId")
         Region =  req.get("Region")
@@ -21,21 +22,7 @@ def lambda_handler(event, context):
         assert len(region) > 0, "Region does not exist"
     
         result = query(f"select {SelectedColumn} from Video natural join Channel where CategoryId = '{CategoryId}' and Region = '{Region}' and TrendingDate = (select max(TrendingDate) from Video) order by {SortBy} DESC limit 10")
-
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 200,
-          "headers": {},
-          "body": json.dumps({
-              "data": result
-          }, default = str)
-        }
     except Exception as e:
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 400,
-          "headers": {},
-          "body": json.dumps({
-              "error_message": str(e)
-          })
-        }
+        error = e
+
+    return get_request_body("GET", result, error)

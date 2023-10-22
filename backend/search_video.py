@@ -1,9 +1,10 @@
 import json
-from sql_query import query
+from utils import query, get_request_body
 
 def lambda_handler(event, context):
+    result, error = None, None
     try:
-        req = json.loads(event["body"])
+        req = event["queryStringParameters"]
 
         assert req.get("Prompt") is not None, "Prompt is empty"
         
@@ -18,11 +19,14 @@ def lambda_handler(event, context):
 
         for i in range(len(prompt)):
             for j in range(i, len(prompt)):
-                list_tags.append(f"\'{' '.join(prompt[i: j + 1])}\'")
-
+                list_tags.append(f"\"{' '.join(prompt[i: j + 1])}\"")
+                
         tags = query(f"select Tag from Tag where Tag in ({', '.join(list_tags)})")
-        tags = [f"'{tag[0]}'" for tag in tags]
-
+        tags = [f"\"{tag[0]}\"" for tag in tags]
+        
+        if len(tags) == 0:
+            return get_request_body("GET", [], error)
+        
         video_counts = query(f"select count(distinct VideoId) from TagOf where Tag in ({', '.join(tags)})")
         max_videos = max([count[0] for count in video_counts])
         num_videos = sum([count[0] for count in video_counts])
@@ -55,21 +59,7 @@ def lambda_handler(event, context):
         sql += f" ORDER BY {SortBy} DESC limit {VideoPerPage} offset {PageNum * VideoPerPage}" 
 
         result = query(sql)
-
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 200,
-          "headers": {},
-          "body": json.dumps({
-              "data": result
-          }, default = str)
-        }
     except Exception as e:
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 400,
-          "headers": {},
-          "body": json.dumps({
-              "error_message": str(e)
-          })
-        }
+        error = e
+
+    return get_request_body("GET", result, error)

@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import os
 import pandas as pd
 import json
-from sql_query import query
+from utils import query
 from time import time
 import yaml
 
