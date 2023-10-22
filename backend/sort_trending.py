@@ -1,10 +1,11 @@
 import json
-from sql_query import query
+from utils import query, get_request_body
 import datetime
 
 def lambda_handler(event, context):
+    result, error = None, None
     try:
-        req = json.loads(event["body"])
+        req = event["queryStringParameters"]
         
         CategoryId = req.get("CategoryId")
         Region =  req.get("Region")
@@ -41,22 +42,8 @@ def lambda_handler(event, context):
         
         sql += f" ORDER BY {SortBy} DESC limit {VideoPerPage} offset {PageNum * VideoPerPage}" 
     
-        result =  query(sql)
-
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 200,
-          "headers": {},
-          "body": json.dumps({
-              "data": result
-          }, default = str)
-        }
+        result = query(sql)
     except Exception as e:
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 400,
-          "headers": {},
-          "body": json.dumps({
-              "error_message": str(e)
-          })
-        }
+        error = e
+
+    return get_request_body("GET", result, error)

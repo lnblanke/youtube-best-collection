@@ -10,12 +10,29 @@
 | 403         | Forbidden (possibly missing API key)                   |
 | 502         | Bad gateway (possible bug in backend so please report) |
 
+### CORS
+
+All APIs listed in the table have enabled cross-origin resource sharing(CORS) and can be accessed from any origin with API key.
+
 ### Request head
 
 ```json
 {
     "x-api-key": $API KEY$
 }
+```
+
+### Request body
+For illustration purposes, we listed request body for each `GET` request method. However, in development this should be changed to query string type. For example,
+```json
+  {
+    "Region": "JP",
+    "CategoryId": 10
+  }
+```
+should be changed to:
+```
+base_url/endpoint?Region=JP&CategoryId=10
 ```
 
 ### Response body
@@ -40,7 +57,9 @@
 
 ### Base URL
 
-`https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/dev/`
+Development environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/dev/`
+
+Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/prod/`
 
 ### Conventions
 

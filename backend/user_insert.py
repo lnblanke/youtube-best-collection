@@ -1,7 +1,8 @@
 import json
-from sql_query import query
+from utils import query, get_request_body, check_invalid_character
 
 def lambda_handler(event, context):
+    error = None
     try:
         req = json.loads(event["body"])
         
@@ -13,8 +14,8 @@ def lambda_handler(event, context):
         assert Password is not None, "Password is empty"
         assert UserName is not None and UserName != "", "UserName is empty"
 
-        assert not any(c in UserName for c in "\"'()[]\{\}"), "UserName contains invalid character"
-        assert not any(c in Password for c in "\"'()[]\{\}"), "Password contains invalid character"
+        assert check_invalid_character(UserName), "UserName contains invalid character"
+        assert check_invalid_character(Password, True), "Password contains invalid character"
 
         username = query(f"select UserName from UserInfo where UserName = '{UserName}'")
         assert len(username) == 0, "User with UserName already exists"
@@ -30,21 +31,7 @@ def lambda_handler(event, context):
             update_items.append(f"'{Avatar}'")
 
         query(f"insert into UserInfo({', '.join(update_cols)}) values ({', '.join(update_items)})")
-
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 201,
-          "headers": {},
-          "body": json.dumps({
-              "message": "success"
-          }, default = str)
-        }
     except Exception as e:
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 400,
-          "headers": {},
-          "body": json.dumps({
-              "error_message": str(e)
-          })
-        }
+        error = e
+
+    return get_request_body("POST", None, error)

@@ -1,7 +1,8 @@
 import json
-from sql_query import query
+from utils import query, get_request_body
 
 def lambda_handler(event, context):
+    error = None
     try:
         req = json.loads(event["body"])
         
@@ -20,21 +21,7 @@ def lambda_handler(event, context):
         assert len(favorite) == 0, "Favorite with VideoId and UserId already exists"
         
         query(f"insert into Favorite(VideoId, UserId) values ('{VideoId}', '{UserId}')")
-
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 201,
-          "headers": {},
-          "body": json.dumps({
-              "message": "success"
-          }, default = str)
-        }
     except Exception as e:
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 400,
-          "headers": {},
-          "body": json.dumps({
-              "error_message": str(e)
-          })
-        }
+        error = e
+
+    return get_request_body("POST", None, error)

@@ -1,9 +1,10 @@
 import json
-from sql_query import query
+from utils import query, get_request_body
 
 def lambda_handler(event, context):
+    result, error = None, None
     try:
-        req = json.loads(event["body"])
+        req = event["queryStringParameters"]
         
         UserId = req.get("UserId")
 
@@ -13,21 +14,7 @@ def lambda_handler(event, context):
         assert len(user) > 0, "User with UserId is not found"
         
         result = query(f"select * from UserInfo where UserId={UserId}")
-
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 200,
-          "headers": {},
-          "body": json.dumps({
-              "data": result
-          }, default = str)
-        }
     except Exception as e:
-        return {
-          "isBase64Encoded" : True,
-          "statusCode": 400,
-          "headers": {},
-          "body": json.dumps({
-              "error_message": str(e)
-          })
-        }
+        error = e
+
+    return get_request_body("GET", result, error)
