@@ -186,12 +186,12 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 
 - Description
 
-  Get user info for given `UserId` 
+  Get user info for given `UserName` 
 - Type: `GET`
 - Sample request body
   ```json
   {
-    "UserId": "2"
+    "UserName": "114514"
   }
   ```
 - Sample response body
