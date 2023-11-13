@@ -3,7 +3,7 @@ from utils import query, get_request_body
 import datetime
 
 def lambda_handler(event, context):
-    result, error = None, None
+    outputs, error = None, None
     try:
         req = event["queryStringParameters"]
         
@@ -21,7 +21,26 @@ def lambda_handler(event, context):
         assert len(w) > 0, "Week does not exist"
         
         result = query(f"select * from WeeklyBest natural join Video where Week = timestamp('{Week}')")
+        
+        outputs = []
+        
+        for [VideoId, Week, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, ChannelId, CategoryId] in result:
+            outputs.append({
+                "VideoId": VideoId,
+                "Week": Week, 
+                "Region": Region,
+                "Title": Title,
+                "PublishedAt": PublishedAt,
+                "Likes": Likes,
+                "TrendingDate": TrendingDate,
+                "ViewCount": ViewCount,
+                "ThumbnailLink": ThumbnailLink,
+                "LikesChange": LikesChange,
+                "ViewCountChange": ViewCountChange,
+                "ChannelId": ChannelId, 
+                "CategoryId": CategoryId
+            })
     except Exception as e:
         error = e
 
-    return get_request_body("GET", result, error)
+    return get_request_body("GET", outputs, error)

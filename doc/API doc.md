@@ -145,6 +145,30 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   }
   ```
 
+#### getCategory
+
+- Description
+
+  Get all categories
+- Type: `GET`
+- Sample request body
+  ```json
+  {
+
+  }
+  ```
+- Sample response body
+  ```json
+  {
+    "data": [
+        {
+            "CategoryId": 1,
+            "CategoryTitle": "Film & Animation"
+        }
+    ]
+  }
+  ```
+
 #### getFavorite
 
 - Description
@@ -154,30 +178,43 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 - Sample request body
   ```json
   {
-    "UserId": "3"
+    "UserId": "2"
   }
   ```
 - Sample response body
-  
-  Columns: [`VideoId`, `UserId`, `Region`, `Title`, `PublishedAt`, `Likes`, `TrendingDate`, `ViewCount`, `ThumbnailLink`, `LikesChange`, `ViewCountChange`, `ChannelId`, `CategoryId`]
   ```json
   {
     "data": [
-        [
-            "z-_vxDY1Gu0",
-            3,
-            "JP",
-            "【超学生×四季凪アキラ】威風堂々 @歌ってみた",
-            "2023-10-12 10:00:09",
-            32155,
-            "2023-10-13 00:00:00",
-            240720,
-            "https://i.ytimg.com/vi/z-_vxDY1Gu0/default.jpg",
-            32155,
-            240720,
-            "UCxIK6x6sG7Ln5vjjPYpgeAw",
-            10
-        ]
+        {
+            "VideoId": "_-uDBzkV1dI",
+            "UserId": 2,
+            "Region": "KR",
+            "Title": "시공하기 좋은 날 하늘궁전 업ㄱ레이드☆",
+            "PublishedAt": "2023-08-29 10:36:48",
+            "Likes": 3359,
+            "TrendingDate": "2023-08-30 00:00:00",
+            "ViewCount": 120353,
+            "ThumbnailLink": "https://i.ytimg.com/vi/_-uDBzkV1dI/default.jpg",
+            "LikesChange": 3359,
+            "ViewCountChange": 120353,
+            "ChannelId": "UCsHXnEd4VtCcKC0SN6ajBGA",
+            "CategoryId": 24
+        },
+        {
+            "VideoId": "z-_vxDY1Gu0",
+            "UserId": 2,
+            "Region": "JP",
+            "Title": "【超学生×四季凪アキラ】威風堂々 @歌ってみた",
+            "PublishedAt": "2023-10-12 10:00:09",
+            "Likes": 46311,
+            "TrendingDate": "2023-10-16 00:00:00",
+            "ViewCount": 462352,
+            "ThumbnailLink": "https://i.ytimg.com/vi/z-_vxDY1Gu0/default.jpg",
+            "LikesChange": 46311,
+            "ViewCountChange": 462352,
+            "ChannelId": "UCxIK6x6sG7Ln5vjjPYpgeAw",
+            "CategoryId": 10
+        }
     ]
   }
   ```
@@ -195,18 +232,16 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   }
   ```
 - Sample response body
-  
-  Columns: [`UserId`, `Password`, `UserName`, `Gender`, `Avatar`]
   ```json
   {
     "data": [
-        [
-            2,
-            "bbbbronya",
-            "114514",
-            "Male",
-            null
-        ]
+        {
+            "UserId": 2,
+            "Password": "bbbbronya",
+            "UserName": "114514",
+            "Gender": "Male",
+            "Avatar": null
+        }
     ]
   }
   ```
@@ -224,26 +259,24 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   }
   ```
 - Sample response body
-  
-  Columns: [`VideoId`, `Week`, `Region`, `Title`, `PublishedAt`, `Likes`, `TrendingDate`, `ViewCount`, `ThumbnailLink`, `LikesChange`, `ViewCountChange`, `ChannelId`, `CategoryId`]
   ```json
   {
     "data": [
-        [
-            "r105CzDvoo0",
-            "2023-10-15 00:00:00",
-            "JP",
-            "milet「Anytime Anywhere」MUSIC VIDEO (TVアニメ『葬送のフリーレン』エンディングテーマ)",
-            "2023-10-06 13:00:09",
-            23182,
-            "2023-10-11 00:00:00",
-            1739109,
-            "https://i.ytimg.com/vi/r105CzDvoo0/default.jpg",
-            23182,
-            1739109,
-            "UCpgxgkifUGSKg9dNFE5Vo7Q",
-            10
-        ]
+        {
+            "VideoId": "r105CzDvoo0",
+            "Week": "2023-10-15 00:00:00",
+            "Region": "JP",
+            "Title": "milet「Anytime Anywhere」MUSIC VIDEO (TVアニメ『葬送のフリーレン』エンディングテーマ)",
+            "PublishedAt": "2023-10-06 13:00:09",
+            "Likes": 30032,
+            "TrendingDate": "2023-10-16 00:00:00",
+            "ViewCount": 3117784,
+            "ThumbnailLink": "https://i.ytimg.com/vi/r105CzDvoo0/default.jpg",
+            "LikesChange": 30032,
+            "ViewCountChange": 3117784,
+            "ChannelId": "UCpgxgkifUGSKg9dNFE5Vo7Q",
+            "CategoryId": 10
+        }
     ]
   }
   ```
@@ -266,86 +299,84 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   }
   ```
 - Sample response body
-  
-  Columns: [`VideoId`, `Relevence`, `Region`, `Title`, `PublishedAt`, `Likes`, `TrendingDate`, `ViewCount`, `ThumbnailLink`, `LikesChange`, `ViewCountChange`, `ChannelId`, `CategoryId`]
   ```json
   {
     "data": [
-        [
-            "HPtq8YK8fDQ",
-            "1.6368",
-            "JP",
-            "青のすみか (Live in Blue) / キタニタツヤ - Where Our Blue Is (Live in Blue) / Tatsuya Kitani",
-            "2023-08-24 12:00:08",
-            20233,
-            "2023-08-30 00:00:00",
-            405200,
-            "https://i.ytimg.com/vi/HPtq8YK8fDQ/default.jpg",
-            20233,
-            405200,
-            "UCgP3GbgbuVzAhlctGU5yuPA",
-            10
-        ],
-        [
-            "-QKk9pKCufs",
-            "0.9670",
-            "JP",
-            "【未公開映像】EXPO Behind the scenes vol.1 ｜NHK MUSIC EXPO 2023 | NHK",
-            "2023-09-14 03:56:38",
-            10984,
-            "2023-09-15 00:00:00",
-            214928,
-            "https://i.ytimg.com/vi/-QKk9pKCufs/default.jpg",
-            10984,
-            214928,
-            "UC8T8_deSUS97DWZeKO_TL9Q",
-            10
-        ],
-        [
-            "1z-_XtdtMwk",
-            "0.9670",
-            "JP",
-            "Sexy Zone ｢本音と建前｣ (YouTube Ver.)",
-            "2023-08-23 12:00:12",
-            0,
-            "2023-08-30 00:00:00",
-            1327522,
-            "https://i.ytimg.com/vi/1z-_XtdtMwk/default.jpg",
-            0,
-            1327522,
-            "UCgXJMvOBqHk5wJFRKZfIgWQ",
-            10
-        ],
-        [
-            "DxyZt6CqGe0",
-            "0.9670",
-            "JP",
-            "Sexy Zone「本音と建前」@CDTV ライブ! ライブ!",
-            "2023-10-04 03:00:06",
-            0,
-            "2023-10-14 00:00:00",
-            609122,
-            "https://i.ytimg.com/vi/DxyZt6CqGe0/default.jpg",
-            0,
-            609122,
-            "UCgXJMvOBqHk5wJFRKZfIgWQ",
-            10
-        ],
-        [
-            "mctEybOqY6s",
-            "0.9670",
-            "JP",
-            "勇者",
-            "2023-09-28 10:00:44",
-            17060,
-            "2023-09-29 00:00:00",
-            268215,
-            "https://i.ytimg.com/vi/mctEybOqY6s/default.jpg",
-            17060,
-            268215,
-            "UCI6B8NkZKqlFWoiC_xE-hzA",
-            10
-        ]
+        {
+            "VideoId": "HPtq8YK8fDQ",
+            "Relevance": "1.6556",
+            "Region": "JP",
+            "Title": "青のすみか (Live in Blue) / キタニタツヤ - Where Our Blue Is (Live in Blue) / Tatsuya Kitani",
+            "PublishedAt": "2023-08-24 12:00:08",
+            "Likes": 20233,
+            "TrendingDate": "2023-08-30 00:00:00",
+            "ViewCount": 405200,
+            "ThumbnailLink": "https://i.ytimg.com/vi/HPtq8YK8fDQ/default.jpg",
+            "LikesChange": 20233,
+            "ViewCountChange": 405200,
+            "ChannelId": "UCgP3GbgbuVzAhlctGU5yuPA",
+            "CategoryId": 10
+        },
+        {
+            "VideoId": "-QKk9pKCufs",
+            "Relevance": "0.9768",
+            "Region": "JP",
+            "Title": "【未公開映像】EXPO Behind the scenes vol.1 ｜NHK MUSIC EXPO 2023 | NHK",
+            "PublishedAt": "2023-09-14 03:56:38",
+            "Likes": 10984,
+            "TrendingDate": "2023-09-15 00:00:00",
+            "ViewCount": 214928,
+            "ThumbnailLink": "https://i.ytimg.com/vi/-QKk9pKCufs/default.jpg",
+            "LikesChange": 10984,
+            "ViewCountChange": 214928,
+            "ChannelId": "UC8T8_deSUS97DWZeKO_TL9Q",
+            "CategoryId": 10
+        },
+        {
+            "VideoId": "1z-_XtdtMwk",
+            "Relevance": "0.9768",
+            "Region": "JP",
+            "Title": "Sexy Zone ｢本音と建前｣ (YouTube Ver.)",
+            "PublishedAt": "2023-08-23 12:00:12",
+            "Likes": 0,
+            "TrendingDate": "2023-08-30 00:00:00",
+            "ViewCount": 1327522,
+            "ThumbnailLink": "https://i.ytimg.com/vi/1z-_XtdtMwk/default.jpg",
+            "LikesChange": 0,
+            "ViewCountChange": 1327522,
+            "ChannelId": "UCgXJMvOBqHk5wJFRKZfIgWQ",
+            "CategoryId": 10
+        },
+        {
+            "VideoId": "DxyZt6CqGe0",
+            "Relevance": "0.9768",
+            "Region": "JP",
+            "Title": "Sexy Zone「本音と建前」@CDTV ライブ! ライブ!",
+            "PublishedAt": "2023-10-04 03:00:06",
+            "Likes": 0,
+            "TrendingDate": "2023-10-14 00:00:00",
+            "ViewCount": 609122,
+            "ThumbnailLink": "https://i.ytimg.com/vi/DxyZt6CqGe0/default.jpg",
+            "LikesChange": 0,
+            "ViewCountChange": 609122,
+            "ChannelId": "UCgXJMvOBqHk5wJFRKZfIgWQ",
+            "CategoryId": 10
+        },
+        {
+            "VideoId": "mctEybOqY6s",
+            "Relevance": "0.9768",
+            "Region": "JP",
+            "Title": "勇者",
+            "PublishedAt": "2023-09-28 10:00:44",
+            "Likes": 17060,
+            "TrendingDate": "2023-09-29 00:00:00",
+            "ViewCount": 268215,
+            "ThumbnailLink": "https://i.ytimg.com/vi/mctEybOqY6s/default.jpg",
+            "LikesChange": 17060,
+            "ViewCountChange": 268215,
+            "ChannelId": "UCI6B8NkZKqlFWoiC_xE-hzA",
+            "CategoryId": 10
+        }
     ]
   }
   ```
@@ -359,34 +390,32 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 - Sample request body
   ```json
   {
-    "CategoryId": 10, [Not required]
+    "CategoryId": 20, [Not required]
     "Region": "JP", [Not required]
-    "ChannelId": "UCpgxgkifUGSKg9dNFE5Vo7Q", [Not required]
+    "ChannelId": "UCAVR6Q0YgYa8xwz8rdg9Mrg", [Not required]
     "SortBy": "likes",  [Likes | ViewCount | PublishedAt | TrendingDate]
     "PageNum": 0,  [Not required, default: 0]
     "VideoPerPage": 10  [Not required, default: 20]
   }
   ```
 - Sample response body
-
-  Columns: [`VideoId`, `Region`, `Title`, `PublishedAt`, `Likes`, `TrendingDate`, `ViewCount`, `ThumbnailLink`, `LikesChange`, `ViewCountChange`, `ChannelId`, `CategoryId`]
   ```json
   {
     "data": [
-        [
-            "r105CzDvoo0",
-            "JP",
-            "milet「Anytime Anywhere」MUSIC VIDEO (TVアニメ『葬送のフリーレン』エンディングテーマ)",
-            "2023-10-06 13:00:09",
-            23182,
-            "2023-10-11 00:00:00",
-            1739109,
-            "https://i.ytimg.com/vi/r105CzDvoo0/default.jpg",
-            23182,
-            1739109,
-            "UCpgxgkifUGSKg9dNFE5Vo7Q",
-            10
-        ]
+        {
+            "VideoId": "U5VJ2RMwRAY",
+            "Region": "JP",
+            "Title": "【原神】キャラクター実戦紹介　フリーナ(CV：水瀬いのり)「世界はみな舞台」",
+            "PublishedAt": "2023-11-07 04:00:10",
+            "Likes": 102566,
+            "TrendingDate": "2023-11-08 00:00:00",
+            "ViewCount": 1441686,
+            "ThumbnailLink": "https://i.ytimg.com/vi/U5VJ2RMwRAY/default.jpg",
+            "LikesChange": 102566,
+            "ViewCountChange": 1441686,
+            "ChannelId": "UCAVR6Q0YgYa8xwz8rdg9Mrg",
+            "CategoryId": 20
+        }
     ]
   }
   ```
@@ -407,31 +436,29 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   }
   ```
 - Sample response body
-  
-  Columns: [`Title` or `ChannelTitle`, `ViewCount`, `Likes`]
   ```json
   {
     "data": [
-        [
-            "【阿鼻叫喚】鼻毛綱引きで最強の男を決めろ！？！？",
-            149143,
-            12776
-        ],
-        [
-            "神域リーグ2023 エキシビションマッチ",
-            280960,
-            4754
-        ],
-        [
-            "【原神】新星5キャラ　フリーナ解説　全体ダメージバフ持ちの神サポート！【げんしん】",
-            256720,
-            4065
-        ],
-        [
-            "VALORANT - CRカップ顔合わせよりもスクリムよりもなぜかキリンに夢中なチームがあるらしい w/ 獅子堂あかり 善悪菌 VanilLa ボドカ 夢野あかり",
-            184904,
-            3586
-        ]
+        {
+            "Title": "【阿鼻叫喚】鼻毛綱引きで最強の男を決めろ！？！？",
+            "ViewCount": 149143,
+            "Likes": 12776
+        },
+        {
+            "Title": "神域リーグ2023 エキシビションマッチ",
+            "ViewCount": 280960,
+            "Likes": 4754
+        },
+        {
+            "Title": "【原神】新星5キャラ　フリーナ解説　全体ダメージバフ持ちの神サポート！【げんしん】",
+            "ViewCount": 256720,
+            "Likes": 4065
+        },
+        {
+            "Title": "VALORANT - CRカップ顔合わせよりもスクリムよりもなぜかキリンに夢中なチームがあるらしい w/ 獅子堂あかり 善悪菌 VanilLa ボドカ 夢野あかり",
+            "ViewCount": 184904,
+            "Likes": 3586
+        }
     ]
   }
   ```

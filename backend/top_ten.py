@@ -22,7 +22,16 @@ def lambda_handler(event, context):
         assert len(region) > 0, "Region does not exist"
     
         result = query(f"select {SelectedColumn}, ViewCount, Likes from Video natural join Channel where CategoryId = '{CategoryId}' and Region = '{Region}' and TrendingDate = (select max(TrendingDate) from Video) group by {SelectedColumn} order by {SortBy} DESC limit 10")
+    
+        outputs = []
+    
+        for [title, viewcount, likes] in result:
+            outputs.append({
+                f"{SelectedColumn}": title,
+                "ViewCount": viewcount,
+                "Likes": likes
+            })
     except Exception as e:
         error = e
 
-    return get_request_body("GET", result, error)
+    return get_request_body("GET", outputs, error)

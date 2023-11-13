@@ -3,7 +3,7 @@ from utils import query, get_request_body
 import datetime
 
 def lambda_handler(event, context):
-    result, error = None, None
+    outputs, error = None, None
     try:
         req = event["queryStringParameters"]
         
@@ -40,10 +40,28 @@ def lambda_handler(event, context):
         if PageNum is None:
             PageNum = 0
         
-        sql += f" ORDER BY {SortBy} DESC limit {VideoPerPage} offset {PageNum * VideoPerPage}" 
+        sql += f" ORDER BY {SortBy} DESC limit {VideoPerPage} offset {int(PageNum) * int(VideoPerPage)}" 
     
         result = query(sql)
+        
+        outputs = []
+        
+        for [VideoId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, ChannelId, CategoryId] in result:
+            outputs.append({
+                "VideoId": VideoId,
+                "Region": Region,
+                "Title": Title,
+                "PublishedAt": PublishedAt,
+                "Likes": Likes,
+                "TrendingDate": TrendingDate,
+                "ViewCount": ViewCount,
+                "ThumbnailLink": ThumbnailLink,
+                "LikesChange": LikesChange,
+                "ViewCountChange": ViewCountChange,
+                "ChannelId": ChannelId, 
+                "CategoryId": CategoryId
+            })
     except Exception as e:
         error = e
 
-    return get_request_body("GET", result, error)
+    return get_request_body("GET", outputs, error)
