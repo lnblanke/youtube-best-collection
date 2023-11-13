@@ -395,31 +395,42 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 
 - Description
   
-  Get top ten `VideoId` or `ChannelId` based on `CategoryId` and `Region` for today
+  Get top ten `Video` or `Channel` based on `CategoryId` and `Region` for today
 - Type: `GET`
 - Sample request body
   ```json
   {
     "SelectedColumn": "Title", [Title | ChannelTitle]
-    "CategoryId": 10,
+    "CategoryId": 20,
     "Region": "JP",
     "SortBy": "likes" [Likes | ViewCount]
   }
   ```
 - Sample response body
   
-  Columns: [`Title` or `ChannelTitle`]
+  Columns: [`Title` or `ChannelTitle`, `ViewCount`, `Likes`]
   ```json
   {
     "data": [
         [
-            "SEKAI NO OWARI「最高到達点」ONE PIECE リリックMV"
+            "【阿鼻叫喚】鼻毛綱引きで最強の男を決めろ！？！？",
+            149143,
+            12776
         ],
         [
-            "【号泣の最終回…】フランスストリートピアノの旅????????の最終日に愛の讃歌弾いたら…【海外ストリートピアノ/publicpiano/Hymne à l'amour/Édith Piaf】"
+            "神域リーグ2023 エキシビションマッチ",
+            280960,
+            4754
         ],
         [
-            "King & Prince 「愛し生きること / MAGIC WORD」【初回限定盤A】「愛し生きること」 Music Video Shooting Behind the scenes Teaser"
+            "【原神】新星5キャラ　フリーナ解説　全体ダメージバフ持ちの神サポート！【げんしん】",
+            256720,
+            4065
+        ],
+        [
+            "VALORANT - CRカップ顔合わせよりもスクリムよりもなぜかキリンに夢中なチームがあるらしい w/ 獅子堂あかり 善悪菌 VanilLa ボドカ 夢野あかり",
+            184904,
+            3586
         ]
     ]
   }
