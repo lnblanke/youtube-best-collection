@@ -2,7 +2,7 @@ import json
 from utils import query, get_request_body, check_invalid_character
 
 def lambda_handler(event, context):
-    result, error = None, None
+    outputs, error = None, None
     try:
         req = event["queryStringParameters"]
         
@@ -15,7 +15,18 @@ def lambda_handler(event, context):
         assert len(user) > 0, "User with UserName is not found"
         
         result = query(f"select * from UserInfo where UserName = \"{UserName}\"")
+        
+        outputs = []
+        
+        for [UserId, Password, UserName, Gender, Avatar] in result:
+            outputs.append({
+                "UserId": UserId,
+                "Password": Password,
+                "UserName": UserName,
+                "Gender": Gender,
+                "Avatar": Avatar
+            })
     except Exception as e:
         error = e
 
-    return get_request_body("GET", result, error)
+    return get_request_body("GET", outputs, error)
