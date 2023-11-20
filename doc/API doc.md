@@ -73,13 +73,14 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 | [changeUserInfo](#changeuserinfo) | `PUT`    |
 | [favoriteDelete](#favoriteDelete) | `DELETE` |
 | [favoriteInsert](#favoriteInsert) | `POST`   |
+| [getCategory](#getCategory)       | `GET`    |
 | [getFavorite](#getFavorite)       | `GET`    |
 | [getUserInfo](#getUserInfo)       | `GET`    |
 | [getWeeklyBest](#getWeeklyBest)   | `GET`    |
+| [getWeeks](#getWeeks)             | `GET`    |
 | [sortTrending](#sortTrending)     | `GET`    |
 | [topTen](#topTen)                 | `GET`    |
 | [searchVideo](#searchVideo)       | `GET`    |
-| [updateVideo](#updateVideo)       | `PUT`    |
 | [userInsert](#userInsert)         | `POST`   |
 
 #### changeUserInfo
@@ -154,7 +155,6 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 - Sample request body
   ```json
   {
-
   }
   ```
 - Sample response body
@@ -276,6 +276,27 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
             "ViewCountChange": 3117784,
             "ChannelId": "UCpgxgkifUGSKg9dNFE5Vo7Q",
             "CategoryId": 10
+        }
+    ]
+  }
+  ```
+
+#### getWeeks
+
+- Description
+  Get all weeks with weekly best
+- Type: `GET`
+- Sample request body
+  ```json
+  {
+  }
+  ```
+- Sample response body
+  ```json
+  {
+    "data": [
+        {
+            "value": "2023-10-15 00:00:00"
         }
     ]
   }

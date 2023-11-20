@@ -1,6 +1,0 @@
-database:
-  host: "mysql-database.cvz0vt1mykn7.us-east-2.rds.amazonaws.com"
-  user: "admin"
-  password: "edgerunners"
-  database: "youtube"
-  port: "3306"

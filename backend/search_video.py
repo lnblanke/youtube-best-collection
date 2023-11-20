@@ -1,4 +1,3 @@
-import json
 from utils import query, get_request_body
 
 def lambda_handler(event, context):
@@ -8,7 +7,7 @@ def lambda_handler(event, context):
 
         assert req.get("Prompt") is not None, "Prompt is empty"
         
-        prompt = [word.replace("\"", "'") for word in req.get("Prompt").split(" ")]
+        prompt = [word.replace("\"", "\\\"").replace("\\", "\\\\") for word in req.get("Prompt").split(" ")]
         CategoryId = req.get("CategoryId")
         Region = req.get("Region")
         SortBy = req.get("SortBy")
