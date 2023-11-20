@@ -2,7 +2,7 @@ import json
 from utils import query, get_request_body
 
 def lambda_handler(event, context):
-    result, error = None, None
+    outputs, error = None, None
     try:
         req = event["queryStringParameters"]
         SelectedColumn = req.get("SelectedColumn")
@@ -27,7 +27,7 @@ def lambda_handler(event, context):
     
         for [title, viewcount, likes] in result:
             outputs.append({
-                f"{SelectedColumn}": title,
+                "Title": title,
                 "ViewCount": viewcount,
                 "Likes": likes
             })
