@@ -198,7 +198,8 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
             "LikesChange": 3359,
             "ViewCountChange": 120353,
             "ChannelId": "UCsHXnEd4VtCcKC0SN6ajBGA",
-            "CategoryId": 24
+            "CategoryId": 24,
+            "TrendingCount": 0
         },
         {
             "VideoId": "z-_vxDY1Gu0",
@@ -213,7 +214,8 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
             "LikesChange": 46311,
             "ViewCountChange": 462352,
             "ChannelId": "UCxIK6x6sG7Ln5vjjPYpgeAw",
-            "CategoryId": 10
+            "CategoryId": 10,
+            "TrendingCount": 0
         }
     ]
   }
@@ -275,7 +277,8 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
             "LikesChange": 30032,
             "ViewCountChange": 3117784,
             "ChannelId": "UCpgxgkifUGSKg9dNFE5Vo7Q",
-            "CategoryId": 10
+            "CategoryId": 10,
+            "TrendingCount": 0
         }
     ]
   }
@@ -325,7 +328,7 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
     "data": [
         {
             "VideoId": "HPtq8YK8fDQ",
-            "Relevance": "1.6556",
+            "Relevance": "1.6539",
             "Region": "JP",
             "Title": "青のすみか (Live in Blue) / キタニタツヤ - Where Our Blue Is (Live in Blue) / Tatsuya Kitani",
             "PublishedAt": "2023-08-24 12:00:08",
@@ -336,11 +339,12 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
             "LikesChange": 20233,
             "ViewCountChange": 405200,
             "ChannelId": "UCgP3GbgbuVzAhlctGU5yuPA",
-            "CategoryId": 10
+            "CategoryId": 10,
+            "TrendingCount": 0
         },
         {
             "VideoId": "-QKk9pKCufs",
-            "Relevance": "0.9768",
+            "Relevance": "0.9734",
             "Region": "JP",
             "Title": "【未公開映像】EXPO Behind the scenes vol.1 ｜NHK MUSIC EXPO 2023 | NHK",
             "PublishedAt": "2023-09-14 03:56:38",
@@ -351,11 +355,12 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
             "LikesChange": 10984,
             "ViewCountChange": 214928,
             "ChannelId": "UC8T8_deSUS97DWZeKO_TL9Q",
-            "CategoryId": 10
+            "CategoryId": 10,
+            "TrendingCount": 0
         },
         {
             "VideoId": "1z-_XtdtMwk",
-            "Relevance": "0.9768",
+            "Relevance": "0.9734",
             "Region": "JP",
             "Title": "Sexy Zone ｢本音と建前｣ (YouTube Ver.)",
             "PublishedAt": "2023-08-23 12:00:12",
@@ -366,11 +371,28 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
             "LikesChange": 0,
             "ViewCountChange": 1327522,
             "ChannelId": "UCgXJMvOBqHk5wJFRKZfIgWQ",
-            "CategoryId": 10
+            "CategoryId": 10,
+            "TrendingCount": 0
+        },
+        {
+            "VideoId": "CLfQoaHgnVs",
+            "Relevance": "0.9734",
+            "Region": "JP",
+            "Title": "Sexy Zone ｢人生遊戯｣ (YouTube Ver.)",
+            "PublishedAt": "2023-11-15 12:00:12",
+            "Likes": 0,
+            "TrendingDate": "2023-11-17 00:00:00",
+            "ViewCount": 622211,
+            "ThumbnailLink": "https://i.ytimg.com/vi/CLfQoaHgnVs/default.jpg",
+            "LikesChange": 0,
+            "ViewCountChange": 344393,
+            "ChannelId": "UCgXJMvOBqHk5wJFRKZfIgWQ",
+            "CategoryId": 10,
+            "TrendingCount": 3
         },
         {
             "VideoId": "DxyZt6CqGe0",
-            "Relevance": "0.9768",
+            "Relevance": "0.9734",
             "Region": "JP",
             "Title": "Sexy Zone「本音と建前」@CDTV ライブ! ライブ!",
             "PublishedAt": "2023-10-04 03:00:06",
@@ -381,22 +403,8 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
             "LikesChange": 0,
             "ViewCountChange": 609122,
             "ChannelId": "UCgXJMvOBqHk5wJFRKZfIgWQ",
-            "CategoryId": 10
-        },
-        {
-            "VideoId": "mctEybOqY6s",
-            "Relevance": "0.9768",
-            "Region": "JP",
-            "Title": "勇者",
-            "PublishedAt": "2023-09-28 10:00:44",
-            "Likes": 17060,
-            "TrendingDate": "2023-09-29 00:00:00",
-            "ViewCount": 268215,
-            "ThumbnailLink": "https://i.ytimg.com/vi/mctEybOqY6s/default.jpg",
-            "LikesChange": 17060,
-            "ViewCountChange": 268215,
-            "ChannelId": "UCI6B8NkZKqlFWoiC_xE-hzA",
-            "CategoryId": 10
+            "CategoryId": 10,
+            "TrendingCount": 0
         }
     ]
   }
@@ -428,14 +436,15 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
             "Region": "JP",
             "Title": "【原神】キャラクター実戦紹介　フリーナ(CV：水瀬いのり)「世界はみな舞台」",
             "PublishedAt": "2023-11-07 04:00:10",
-            "Likes": 102566,
-            "TrendingDate": "2023-11-08 00:00:00",
-            "ViewCount": 1441686,
+            "Likes": 119283,
+            "TrendingDate": "2023-11-17 00:00:00",
+            "ViewCount": 2749279,
             "ThumbnailLink": "https://i.ytimg.com/vi/U5VJ2RMwRAY/default.jpg",
-            "LikesChange": 102566,
-            "ViewCountChange": 1441686,
+            "LikesChange": 2177,
+            "ViewCountChange": 175445,
             "ChannelId": "UCAVR6Q0YgYa8xwz8rdg9Mrg",
-            "CategoryId": 20
+            "CategoryId": 20,
+            "TrendingCount": 6
         }
     ]
   }
