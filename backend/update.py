@@ -42,8 +42,7 @@ def update_videos(path, time):
                 insert_videos, insert_channel, delete_videos, insert_tags = [], [], [], []
 
                 for _, row in new_df.iterrows():
-                    row.title = row.title.replace("\"", "\\\"").replace("\\", "\\\\")
-                    row.channelTitle = row.channelTitle.replace("\"", "\\\"").replace("\\", "\\\\")
+                    row.channelTitle = row.channelTitle.replace("\\", "\\\\").replace("\"", "\\\"")
                     
                     insert_videos.append(f"('{row.video_id}', '{file[:2]}', \"{row.title}\", timestamp('{row.publishedAt}'), {row.likes}, timestamp('{row.trending_date}'), {row.view_count}, '{row.thumbnail_link}', '{row.channelId}', {row.categoryId})")
                     insert_channel.append(f"('{row.channelId}', \"{row.channelTitle}\")")
@@ -52,7 +51,7 @@ def update_videos(path, time):
                     for tag in row.tags.split("|"):
                         if tag == "" or tag == "[None]":
                             continue
-                        tag = tag.strip().replace("\"", "\\\"").replace("\\", "\\\\")
+                        tag = tag.strip().replace("\\", "\\\\").replace("\"", "\\\"")
                         insert_tags.append(f"('{row.video_id}', \"{tag}\")")
 
                 if len(insert_channel) > 0:

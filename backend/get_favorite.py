@@ -17,7 +17,7 @@ def lambda_handler(event, context):
         
         outputs = []
         
-        for [VideoId, UserId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, ChannelId, CategoryId] in result:
+        for [VideoId, UserId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, ChannelId, CategoryId, TrendingCount] in result:
             outputs.append({
                 "VideoId": VideoId,
                 "UserId": UserId, 
@@ -31,7 +31,8 @@ def lambda_handler(event, context):
                 "LikesChange": LikesChange,
                 "ViewCountChange": ViewCountChange,
                 "ChannelId": ChannelId, 
-                "CategoryId": CategoryId
+                "CategoryId": CategoryId,
+                "TrendingCount": TrendingCount
             })
     except Exception as e:
         error = e
