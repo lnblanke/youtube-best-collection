@@ -78,9 +78,9 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 | [getUserInfo](#getUserInfo)       | `GET`    |
 | [getWeeklyBest](#getWeeklyBest)   | `GET`    |
 | [getWeeks](#getWeeks)             | `GET`    |
+| [searchVideo](#searchVideo)       | `GET`    |
 | [sortTrending](#sortTrending)     | `GET`    |
 | [topTen](#topTen)                 | `GET`    |
-| [searchVideo](#searchVideo)       | `GET`    |
 | [userInsert](#userInsert)         | `POST`   |
 
 #### changeUserInfo
@@ -186,36 +186,20 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   {
     "data": [
         {
-            "VideoId": "_-uDBzkV1dI",
-            "UserId": 2,
-            "Region": "KR",
-            "Title": "시공하기 좋은 날 하늘궁전 업ㄱ레이드☆",
-            "PublishedAt": "2023-08-29 10:36:48",
-            "Likes": 3359,
-            "TrendingDate": "2023-08-30 00:00:00",
-            "ViewCount": 120353,
-            "ThumbnailLink": "https://i.ytimg.com/vi/_-uDBzkV1dI/default.jpg",
-            "LikesChange": 3359,
-            "ViewCountChange": 120353,
-            "ChannelId": "UCsHXnEd4VtCcKC0SN6ajBGA",
-            "CategoryId": 24,
-            "TrendingCount": 0
-        },
-        {
-            "VideoId": "z-_vxDY1Gu0",
-            "UserId": 2,
+            "VideoId": "shZyg5VFI1Y",
             "Region": "JP",
-            "Title": "【超学生×四季凪アキラ】威風堂々 @歌ってみた",
-            "PublishedAt": "2023-10-12 10:00:09",
-            "Likes": 46311,
-            "TrendingDate": "2023-10-16 00:00:00",
-            "ViewCount": 462352,
-            "ThumbnailLink": "https://i.ytimg.com/vi/z-_vxDY1Gu0/default.jpg",
-            "LikesChange": 46311,
-            "ViewCountChange": 462352,
-            "ChannelId": "UCxIK6x6sG7Ln5vjjPYpgeAw",
-            "CategoryId": 10,
-            "TrendingCount": 0
+            "Title": "YOASOBI「Biri-Biri」 Official Music Video",
+            "PublishedAt": "2023-11-18 13:00:09",
+            "Likes": 135773,
+            "TrendingDate": "2023-11-19 00:00:00",
+            "ViewCount": 1859377,
+            "ThumbnailLink": "https://i.ytimg.com/vi/shZyg5VFI1Y/default.jpg",
+            "LikesChange": 135773,
+            "ViewCountChange": 1859377,
+            "ChannelId": "UCvpredjG93ifbCP1Y77JyFA",
+            "ChannelTitle": "Ayase / YOASOBI",
+            "CategoryId": 2,
+            "CategoryTitle": "Music"
         }
     ]
   }
@@ -257,7 +241,7 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 - Sample request body
   ```json
   {
-    "Week": "2023-10-19 11:45:14"
+    "Week": "2023-11-22 11:45:14"
   }
   ```
 - Sample response body
@@ -265,20 +249,20 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   {
     "data": [
         {
-            "VideoId": "r105CzDvoo0",
-            "Week": "2023-10-15 00:00:00",
+            "VideoId": "shZyg5VFI1Y",
             "Region": "JP",
-            "Title": "milet「Anytime Anywhere」MUSIC VIDEO (TVアニメ『葬送のフリーレン』エンディングテーマ)",
-            "PublishedAt": "2023-10-06 13:00:09",
-            "Likes": 30032,
-            "TrendingDate": "2023-10-16 00:00:00",
-            "ViewCount": 3117784,
-            "ThumbnailLink": "https://i.ytimg.com/vi/r105CzDvoo0/default.jpg",
-            "LikesChange": 30032,
-            "ViewCountChange": 3117784,
-            "ChannelId": "UCpgxgkifUGSKg9dNFE5Vo7Q",
-            "CategoryId": 10,
-            "TrendingCount": 0
+            "Title": "YOASOBI「Biri-Biri」 Official Music Video",
+            "PublishedAt": "2023-11-18 13:00:09",
+            "Likes": 135773,
+            "TrendingDate": "2023-11-19 00:00:00",
+            "ViewCount": 1859377,
+            "ThumbnailLink": "https://i.ytimg.com/vi/shZyg5VFI1Y/default.jpg",
+            "LikesChange": 135773,
+            "ViewCountChange": 1859377,
+            "ChannelId": "UCvpredjG93ifbCP1Y77JyFA",
+            "ChannelTitle": "Ayase / YOASOBI",
+            "CategoryId": 2,
+            "CategoryTitle": "Music"
         }
     ]
   }
@@ -315,11 +299,9 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   ```json
   {
     "Prompt": "YOASOBI anime music",
-    "CategoryId": 10,  [Not required]
+    "CategoryId": 2,  [Not required]
     "Region": "JP",  [Not required]
     "SortBy": "relevance",  [Likes | ViewCount | PublishedAt | TrendingDate | Relevance]
-    "PageNum": 0, [Not required, default: 0]
-    "VideoPerPage": 5  [Not required, default: 20]
   }
   ```
 - Sample response body
@@ -327,84 +309,68 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   {
     "data": [
         {
-            "VideoId": "HPtq8YK8fDQ",
-            "Relevance": "1.6539",
-            "Region": "JP",
-            "Title": "青のすみか (Live in Blue) / キタニタツヤ - Where Our Blue Is (Live in Blue) / Tatsuya Kitani",
-            "PublishedAt": "2023-08-24 12:00:08",
-            "Likes": 20233,
-            "TrendingDate": "2023-08-30 00:00:00",
-            "ViewCount": 405200,
-            "ThumbnailLink": "https://i.ytimg.com/vi/HPtq8YK8fDQ/default.jpg",
-            "LikesChange": 20233,
-            "ViewCountChange": 405200,
-            "ChannelId": "UCgP3GbgbuVzAhlctGU5yuPA",
-            "CategoryId": 10,
-            "TrendingCount": 0
+            "VideoId": "shZyg5VFI1Y",
+            "Relevance": 12,
+            "Title": "YOASOBI「Biri-Biri」 Official Music Video",
+            "PublishedAt": "2023-11-18 13:00:09",
+            "Likes": 135773,
+            "TrendingDate": "2023-11-19 00:00:00",
+            "ViewCount": 1859377,
+            "ThumbnailLink": "https://i.ytimg.com/vi/shZyg5VFI1Y/default.jpg",
+            "LikesChange": 135773,
+            "ViewCountChange": 1859377,
+            "ChannelId": "UCvpredjG93ifbCP1Y77JyFA",
+            "ChannelTitle": "Ayase / YOASOBI",
+            "CategoryId": 2,
+            "CategoryTitle": "Music"
         },
         {
-            "VideoId": "-QKk9pKCufs",
-            "Relevance": "0.9734",
-            "Region": "JP",
-            "Title": "【未公開映像】EXPO Behind the scenes vol.1 ｜NHK MUSIC EXPO 2023 | NHK",
-            "PublishedAt": "2023-09-14 03:56:38",
-            "Likes": 10984,
-            "TrendingDate": "2023-09-15 00:00:00",
-            "ViewCount": 214928,
-            "ThumbnailLink": "https://i.ytimg.com/vi/-QKk9pKCufs/default.jpg",
-            "LikesChange": 10984,
-            "ViewCountChange": 214928,
-            "ChannelId": "UC8T8_deSUS97DWZeKO_TL9Q",
-            "CategoryId": 10,
-            "TrendingCount": 0
+            "VideoId": "0N5r5VEppio",
+            "Relevance": 5,
+            "Title": "[뮤뱅 원테이크] 스트레이 키즈 (Stray Kids) '락 (樂) (LALALALA)' Bonus Ver. @뮤직뱅크 (Music Bank) 231110",
+            "PublishedAt": "2023-11-10 10:00:01",
+            "Likes": 92888,
+            "TrendingDate": "2023-11-18 00:00:00",
+            "ViewCount": 1062804,
+            "ThumbnailLink": "https://i.ytimg.com/vi/0N5r5VEppio/default.jpg",
+            "LikesChange": 11611,
+            "ViewCountChange": 132851,
+            "ChannelId": "UCeLPm9yH_a_QH8n6445G-Ow",
+            "ChannelTitle": "KBS Kpop",
+            "CategoryId": 2,
+            "CategoryTitle": "Music"
         },
         {
-            "VideoId": "1z-_XtdtMwk",
-            "Relevance": "0.9734",
-            "Region": "JP",
-            "Title": "Sexy Zone ｢本音と建前｣ (YouTube Ver.)",
-            "PublishedAt": "2023-08-23 12:00:12",
-            "Likes": 0,
-            "TrendingDate": "2023-08-30 00:00:00",
-            "ViewCount": 1327522,
-            "ThumbnailLink": "https://i.ytimg.com/vi/1z-_XtdtMwk/default.jpg",
-            "LikesChange": 0,
-            "ViewCountChange": 1327522,
-            "ChannelId": "UCgXJMvOBqHk5wJFRKZfIgWQ",
-            "CategoryId": 10,
-            "TrendingCount": 0
+            "VideoId": "3FuSyMhwiNs",
+            "Relevance": 5,
+            "Title": "[예능연구소] NiziU - HEARTRIS(니쥬 – 하트리스) FanCam | Show! MusicCore | MBC231111방송",
+            "PublishedAt": "2023-11-11 10:38:29",
+            "Likes": 12430,
+            "TrendingDate": "2023-11-18 00:00:00",
+            "ViewCount": 393078,
+            "ThumbnailLink": "https://i.ytimg.com/vi/3FuSyMhwiNs/default.jpg",
+            "LikesChange": 1776,
+            "ViewCountChange": 56154,
+            "ChannelId": "UCe52oeb7Xv_KaJsEzcKXJJg",
+            "ChannelTitle": "MBCkpop",
+            "CategoryId": 2,
+            "CategoryTitle": "Music"
         },
         {
-            "VideoId": "CLfQoaHgnVs",
-            "Relevance": "0.9734",
-            "Region": "JP",
-            "Title": "Sexy Zone ｢人生遊戯｣ (YouTube Ver.)",
-            "PublishedAt": "2023-11-15 12:00:12",
-            "Likes": 0,
-            "TrendingDate": "2023-11-17 00:00:00",
-            "ViewCount": 622211,
-            "ThumbnailLink": "https://i.ytimg.com/vi/CLfQoaHgnVs/default.jpg",
-            "LikesChange": 0,
-            "ViewCountChange": 344393,
-            "ChannelId": "UCgXJMvOBqHk5wJFRKZfIgWQ",
-            "CategoryId": 10,
-            "TrendingCount": 3
-        },
-        {
-            "VideoId": "DxyZt6CqGe0",
-            "Relevance": "0.9734",
-            "Region": "JP",
-            "Title": "Sexy Zone「本音と建前」@CDTV ライブ! ライブ!",
-            "PublishedAt": "2023-10-04 03:00:06",
-            "Likes": 0,
-            "TrendingDate": "2023-10-14 00:00:00",
-            "ViewCount": 609122,
-            "ThumbnailLink": "https://i.ytimg.com/vi/DxyZt6CqGe0/default.jpg",
-            "LikesChange": 0,
-            "ViewCountChange": 609122,
-            "ChannelId": "UCgXJMvOBqHk5wJFRKZfIgWQ",
-            "CategoryId": 10,
-            "TrendingCount": 0
+            "VideoId": "CUSUhXqThjY",
+            "Relevance": 5,
+            "Title": "Aimer「白色蜉蝣」 Music Video",
+            "PublishedAt": "2023-11-14 12:00:11",
+            "Likes": 14532,
+            "TrendingDate": "2023-11-19 00:00:00",
+            "ViewCount": 384616,
+            "ThumbnailLink": "https://i.ytimg.com/vi/CUSUhXqThjY/default.jpg",
+            "LikesChange": 2906,
+            "ViewCountChange": 76923,
+            "ChannelId": "UCR1zT1s524Hbc85bdvno_8w",
+            "ChannelTitle": "Aimer Official YouTube Channel",
+            "CategoryId": 2,
+            "CategoryTitle": "Music"
         }
     ]
   }
@@ -419,12 +385,10 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 - Sample request body
   ```json
   {
-    "CategoryId": 20, [Not required]
+    "CategoryId": 0, [Not required]
     "Region": "JP", [Not required]
-    "ChannelId": "UCAVR6Q0YgYa8xwz8rdg9Mrg", [Not required]
+    "ChannelId": "", [Not required]
     "SortBy": "likes",  [Likes | ViewCount | PublishedAt | TrendingDate]
-    "PageNum": 0,  [Not required, default: 0]
-    "VideoPerPage": 10  [Not required, default: 20]
   }
   ```
 - Sample response body
@@ -432,19 +396,52 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   {
     "data": [
         {
-            "VideoId": "U5VJ2RMwRAY",
+            "VideoId": "chIqaTzttWE",
             "Region": "JP",
-            "Title": "【原神】キャラクター実戦紹介　フリーナ(CV：水瀬いのり)「世界はみな舞台」",
-            "PublishedAt": "2023-11-07 04:00:10",
-            "Likes": 119283,
-            "TrendingDate": "2023-11-17 00:00:00",
-            "ViewCount": 2749279,
-            "ThumbnailLink": "https://i.ytimg.com/vi/U5VJ2RMwRAY/default.jpg",
-            "LikesChange": 2177,
-            "ViewCountChange": 175445,
-            "ChannelId": "UCAVR6Q0YgYa8xwz8rdg9Mrg",
-            "CategoryId": 20,
-            "TrendingCount": 6
+            "Title": "【大公開】くろのわのマネージャーってどんな仕事してるの？  #くろなん",
+            "PublishedAt": "2023-11-13 10:00:08",
+            "Likes": 18192,
+            "TrendingDate": "2023-11-18 00:00:00",
+            "ViewCount": 426683,
+            "ThumbnailLink": "https://i.ytimg.com/vi/chIqaTzttWE/default.jpg",
+            "LikesChange": 3638,
+            "ViewCountChange": 85337,
+            "ChannelId": "UCz6vnIbgiqFT9xUcD6Bp65Q",
+            "ChannelTitle": "ChroNoiR",
+            "CategoryId": 0,
+            "CategoryTitle": "Film & Animation"
+        },
+        {
+            "VideoId": "hf7526IRvpo",
+            "Region": "JP",
+            "Title": "「陰の実力者になりたくて！ 2nd season」 第7話予告≪ノーマルVer.≫「大切なもの」",
+            "PublishedAt": "2023-11-10 08:00:31",
+            "Likes": 12205,
+            "TrendingDate": "2023-11-18 00:00:00",
+            "ViewCount": 714055,
+            "ThumbnailLink": "https://i.ytimg.com/vi/hf7526IRvpo/default.jpg",
+            "LikesChange": 1526,
+            "ViewCountChange": 89257,
+            "ChannelId": "UCY5fcqgSrQItPAX_Z5Frmwg",
+            "ChannelTitle": "KADOKAWAanime",
+            "CategoryId": 0,
+            "CategoryTitle": "Film & Animation"
+        },
+        {
+            "VideoId": "kEc6IegVHas",
+            "Region": "JP",
+            "Title": "劇場版『機動戦士ガンダムSEED FREEDOM』第4弾PV",
+            "PublishedAt": "2023-11-19 10:30:16",
+            "Likes": 11717,
+            "TrendingDate": "2023-11-20 00:00:00",
+            "ViewCount": 650634,
+            "ThumbnailLink": "https://i.ytimg.com/vi/kEc6IegVHas/default.jpg",
+            "LikesChange": 11717,
+            "ViewCountChange": 650634,
+            "ChannelId": "UC7wu64jFsV02bbu6UHUd7JA",
+            "ChannelTitle": "ガンダムチャンネル",
+            "CategoryId": 0,
+            "CategoryTitle": "Film & Animation"
         }
     ]
   }
