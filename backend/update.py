@@ -9,21 +9,29 @@ import yaml
 cnx = get_connection(yaml.safe_load(open("config.yaml"))["database"])
 cursor = cnx.cursor()
 
+category_id_mapping = {}
+
 def update_category(path):
+    categories = {}
+    
     for _, _, files in os.walk(path):
         for file in files:
             if file[-4:] == "json":
                 with open(path + file) as f:
                     file = json.load(f)
 
-                    update_query = ""
-
                     for category in file["items"]:
                         id, title = int(category["id"]), category["snippet"]["title"]
-                        update_query += f"({id}, '{title}'),";
-                            
-                    if update_query != "":
-                        cursor.execute(f"insert ignore into Category(CategoryId, CategoryName) values " + update_query[:-1])
+                        categories[id] = title  
+
+    update_query = []
+
+    for (i, key) in enumerate(categories.keys()):
+        category_id_mapping[key] = i
+
+        update_query.append(f"({i}, \"{categories[key]}\")")
+
+    cursor.execute(f"insert ignore into Category(CategoryId, CategoryName) values {', '.join(update_query)}")
 
 def update_videos(path, time):
     for _, _, files in os.walk(path):
@@ -39,12 +47,24 @@ def update_videos(path, time):
                 new_df = df[df["trending_date"] >= time - timedelta(days = 2)].reset_index()
                 new_df = new_df.drop_duplicates(subset = ["video_id"], keep = "first", ignore_index = True)
 
+                prev_df = pd.merge(df, new_df, indicator=True, how='outer').query('_merge=="left_only"').drop('_merge', axis=1)
+                prev_df = prev_df.drop_duplicates(subset = ["video_id"], keep = "first", ignore_index = True)
+
                 insert_videos, insert_channel, delete_videos, insert_tags = [], [], [], []
 
                 for _, row in new_df.iterrows():
+                    prev_row = prev_df.loc[df["video_id"] == row.video_id]
+
+                    if len(prev_row) == 0:
+                        likes_change = row.likes / (max((row.trending_date - row.publishedAt).days, 0) + 1)
+                        viewcount_change = row.view_count / (max((row.trending_date - row.publishedAt).days, 0) + 1)
+                    else:
+                        likes_change = (row.likes - prev_row.likes) / ((row.trending_date - prev_row.trending_date).days + 1)
+                        viewcount_change = (row.view_count - prev_row.view_count) / ((row.trending_date - prev_row.trending_date).days + 1)
+
                     row.channelTitle = row.channelTitle.replace("\\", "\\\\").replace("\"", "\\\"")
                     
-                    insert_videos.append(f"('{row.video_id}', '{file[:2]}', \"{row.title}\", timestamp('{row.publishedAt}'), {row.likes}, timestamp('{row.trending_date}'), {row.view_count}, '{row.thumbnail_link}', '{row.channelId}', {row.categoryId})")
+                    insert_videos.append(f"('{row.video_id}', '{file[:2]}', \"{row.title}\", timestamp('{row.publishedAt}'), {row.likes}, timestamp('{row.trending_date}'), {row.view_count}, '{row.thumbnail_link}', '{row.channelId}', {category_id_mapping[row.categoryId]}, {likes_change}, {viewcount_change})")
                     insert_channel.append(f"('{row.channelId}', \"{row.channelTitle}\")")
                     delete_videos.append(f"'{row.video_id}'")
 
@@ -57,7 +77,7 @@ def update_videos(path, time):
                 if len(insert_channel) > 0:
                     cursor.execute("insert ignore into Channel(ChannelId, ChannelTitle) values " + ", ".join(insert_channel))
                 if len(insert_videos) > 0:
-                    cursor.execute("replace into Video(VideoId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, ChannelId, CategoryId) values " + ", ".join(insert_videos))
+                    cursor.execute("replace into Video(VideoId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, ChannelId, CategoryId, LikesChange, ViewCountChange) values " + ", ".join(insert_videos))
 
                 if len(delete_videos) > 0:
                     cursor.execute(f"delete from TagOf where VideoId in ({', '.join(delete_videos)})")
@@ -87,7 +107,10 @@ def update_videos(path, time):
                         viewcount_change = (row.view_count - last_trending.at[0, "view_count"]) / ((row.trending_date - last_trending.at[0, "trending_date"]).days + 1)
                         likes_change = (row.likes - last_trending.at[0, "likes"]) / ((row.trending_date - last_trending.at[0, "trending_date"]).days + 1)
                         
-                    cursor.execute(f"update Video set ViewCountChange = {viewcount_change}, LikesChange = {likes_change}, TrendingCount = {trending_count} where VideoId = '{row.video_id}' and Region = '{file[:2]}'")
+                    try:
+                        cursor.execute(f"update Video set WeeklyViewCountChange = {viewcount_change}, WeeklyLikesChange = {likes_change}, TrendingCount = {trending_count} where VideoId = '{row.video_id}' and Region = '{file[:2]}'")
+                    except:
+                        pass
 
 def update_db(path):
     time = query("select max(UpdateTime) from Config where UpdateItem = 'Video' and Status <> 'F'")[0][0]
@@ -124,17 +147,19 @@ def update_weekly_best():
 
 def lambda_handler(event, context):
     error = None
-    path = yaml.safe_load(open("/opt/config.yaml"))["data"]["path"]
+    # path = yaml.safe_load(open("/opt/config.yaml"))["data"]["path"]
+    path = yaml.safe_load(open("config.yaml"))["data"]["path"]
 
     try:
-        cnx.start_transaction()
+        cursor.execute("start transaction read write")
         update_db(path)
         update_weekly_best()
-        cnx.commit()
+        cursor.execute("commit")
         cursor.close()
     except Exception as e:
         error = e
+        cursor.execute("rollback")
         
     return get_request_body("PUT", None, error) 
 
-# print(lambda_handler(None, None))
+print(lambda_handler(None, None))

@@ -20,14 +20,13 @@ def lambda_handler(event, context):
         w = query(f"select Week from WeeklyBest where Week = timestamp('{Week}')")
         assert len(w) > 0, "Week does not exist"
         
-        result = query(f"select * from WeeklyBest natural join Video where Week = timestamp('{Week}')")
+        result = query(f"select * from WeeklyBest natural join Video natural join Channel natural join Category where Week = timestamp('{Week}')")
         
         outputs = []
         
-        for [VideoId, Week, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, ChannelId, CategoryId, TrendingCount] in result:
+        for [CategoryId, ChannelId, VideoId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, _, _, _, ChannelTitle, CategoryTitle] in result:
             outputs.append({
                 "VideoId": VideoId,
-                "Week": Week, 
                 "Region": Region,
                 "Title": Title,
                 "PublishedAt": PublishedAt,
@@ -38,8 +37,9 @@ def lambda_handler(event, context):
                 "LikesChange": LikesChange,
                 "ViewCountChange": ViewCountChange,
                 "ChannelId": ChannelId, 
+                "ChannelTitle": ChannelTitle,
                 "CategoryId": CategoryId,
-                "TrendingCount": TrendingCount
+                "CategoryTitle": CategoryTitle
             })
     except Exception as e:
         error = e

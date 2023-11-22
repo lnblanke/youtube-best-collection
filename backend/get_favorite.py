@@ -13,14 +13,13 @@ def lambda_handler(event, context):
         user = query(f"select UserId from UserInfo where UserId = {UserId}")
         assert len(user) > 0, "User with UserId is not found"
         
-        result = query(f"select * from Favorite natural join Video where UserId={UserId}")
+        result = query(f"select * from Favorite natural join Video natural join Channel natural join Category where UserId={UserId}")
         
         outputs = []
         
-        for [VideoId, UserId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, ChannelId, CategoryId, TrendingCount] in result:
+        for [CategoryId, ChannelId, VideoId, _, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, _, _, _, ChannelTitle, CategoryTitle] in result:
             outputs.append({
                 "VideoId": VideoId,
-                "UserId": UserId, 
                 "Region": Region,
                 "Title": Title,
                 "PublishedAt": PublishedAt,
@@ -31,8 +30,9 @@ def lambda_handler(event, context):
                 "LikesChange": LikesChange,
                 "ViewCountChange": ViewCountChange,
                 "ChannelId": ChannelId, 
+                "ChannelTitle": ChannelTitle,
                 "CategoryId": CategoryId,
-                "TrendingCount": TrendingCount
+                "CategoryTitle": CategoryTitle
             })
     except Exception as e:
         error = e
