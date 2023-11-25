@@ -18,7 +18,7 @@ import {
     Drawer,
     Button,
     Modal,
-    message, Upload, Spin,
+    message, Upload, Spin, Flex, Row, Col,
 } from "antd";
 import {
     HeartOutlined,
@@ -26,9 +26,8 @@ import {
     ArrowUpOutlined,
     StarOutlined,
     StarFilled,
-    SearchOutlined,
     ArrowDownOutlined,
-    UserOutlined, LoadingOutlined, PlusOutlined, UploadOutlined
+    UserOutlined, LoadingOutlined, PlusOutlined, ClockCircleOutlined, ExportOutlined
 } from "@ant-design/icons";
 import axios from "axios";
 import {NavLink, useNavigate, useLocation} from "react-router-dom";
@@ -76,8 +75,11 @@ const Home = () => {
     const Top_10 = [
         {
             title: "TOP 10",
-            dataIndex: "Title",
+            dataIndex: ["Title", "Id"],
             key: "top",
+            render: (_, row) => <a
+                href = {tile_or_channel === "Title"? `https://www.youtube.com/watch?v=${row.Id}`: `https://www.youtube.com/channel/${row.Id}`} target="_blank" style = {{color: "black"}}
+            > {row.Title} </a>
         },
         {
             title: "Views",
@@ -93,8 +95,9 @@ const Home = () => {
     const weekly_best = [
         {
             title: "Weekly Best",
-            dataIndex: "Title",
+            dataIndex: ["Title", "VideoId"],
             key: "weekly_best",
+            render: (_, row) => <a href = {`https://www.youtube.com/watch?v=${row.VideoId}`} target="_blank" style = {{color: "black"}}> {row.Title} </a>
         },
         {
             title: "Views",
@@ -112,20 +115,20 @@ const Home = () => {
         color: '#fff',
         height: 100,
         paddingInline: 50,
-        lineHeight: '64px',
+        lineHeight: '6.6vh',
         backgroundColor: '#9DCD84',
     };
     const contentStyle = {
         textAlign: 'center',
         minHeight: '100vh',
-        lineHeight: '120px',
+        lineHeight: '12.5vh',
         color: '#fff',
         backgroundColor: '#9DCD84',
     };
     const siderStyle = {
         textAlign: 'center',
-        lineHeight: '120px',
-        minHeight: '100vh',
+        lineHeight: '11vh',
+        minHeight: '960px',
         color: '#fff',
         backgroundColor: '#E5FCD2',
     };
@@ -336,16 +339,26 @@ const Home = () => {
         if (!search_value) {
             if (sort_main === 'Relevance') {
                 setSort_main('PublishedAt');
+                setLoading(true)
+                axios.get(`${baseurl}sortTrending?SortBy=PublishedAt&Region=${region_main || ""}&CategoryId=${category_main || ""}&ChannelId=${channel_main || ""}`, {
+                    headers: {
+                        "x-api-key": "urLOROFoXZC3weFVmAmV7l5QtbEMOi67kBBr9UI8"
+                    }
+                }).then((response) => {
+                    setWeek_weekly(response.data['data']);
+                    setLoading(false)
+                });
+            } else {
+                setLoading(true)
+                axios.get(`${baseurl}sortTrending?SortBy=${sort_main || ""}&Region=${region_main || ""}&CategoryId=${category_main || ""}&ChannelId=${channel_main || ""}`, {
+                    headers: {
+                        "x-api-key": "urLOROFoXZC3weFVmAmV7l5QtbEMOi67kBBr9UI8"
+                    }
+                }).then((response) => {
+                    setWeek_weekly(response.data['data']);
+                    setLoading(false)
+                });
             }
-            setLoading(true)
-            axios.get(`${baseurl}sortTrending?SortBy=${sort_main || ""}&Region=${region_main || ""}&CategoryId=${category_main || ""}&ChannelId=${channel_main || ""}`, {
-                headers: {
-                    "x-api-key": "urLOROFoXZC3weFVmAmV7l5QtbEMOi67kBBr9UI8"
-                }
-            }).then((response) => {
-                setWeek_weekly(response.data['data']);
-                setLoading(false)
-            });
         } else {
             setLoading(true)
             axios.get(`${baseurl}searchVideo?Prompt=${search_value}&SortBy=${sort_main || ""}&Region=${region_main || ""}&CategoryId=${category_main || ""}&ChannelId=${channel_main || ""}`, {
@@ -377,15 +390,15 @@ const Home = () => {
             }} open={drawerOpen}>
                 {(userId === null) ? (
                     <>
-                        <Title level={4} style={{margin: '18px', fontFamily: 'Orbitron'}}> Please Login First </Title>
+                        <Title level={4} style={{margin: '1vw', fontFamily: 'Orbitron'}}> Please Login First </Title>
                         <Space direction='horizontal'>
-                            <Button type="primary" style={{margin: '15px', width: '100px', fontFamily: 'Orbitron'}}
+                            <Button type="primary" style={{margin: '1vw', fontFamily: 'Orbitron'}}
                                     onClick={() => {
                                         navigate('/LogIn');
                                     }}>
                                 LogIn
                             </Button>
-                            <Button type="primary" style={{margin: '1px', width: '100px', fontFamily: 'Orbitron'}}
+                            <Button type="primary" style={{margin: '0.05vw', fontFamily: 'Orbitron'}}
                                     onClick={() => {
                                         navigate('/Register');
                                     }}>
@@ -395,14 +408,14 @@ const Home = () => {
                     </>
                 ) : (
                     <Space direction='vertical' size={1}>
-                        <Title level={4} style={{margin: '18px', fontFamily: 'Orbitron'}}> UserInformation </Title>
-                        <div style={{margin: '20px', fontFamily: 'Orbitron'}}>
+                        <Title level={4} style={{margin: '1.4vw', fontFamily: 'Orbitron'}}> UserInformation </Title>
+                        <div style={{margin: '1.4vw', fontFamily: 'Orbitron', color: "black"}}>
                             User Name: {userName}
                         </div>
-                        <div style={{margin: '20px', fontFamily: 'Orbitron'}}>
+                        <div style={{margin: '1.4vw', fontFamily: 'Orbitron', color: "black"}}>
                             User Gender: {(userGender) ? (userGender) : ("Undefined")}
                         </div>
-                        <div style={{margin: '20px', fontFamily: 'Orbitron'}}>
+                        <div style={{margin: '1.4vw', fontFamily: 'Orbitron', color: "black"}}>
                             User Favorite:
                         </div>
                         {(favoriteList === null) ? null : (
@@ -413,6 +426,7 @@ const Home = () => {
                                     pageSize: 10,
                                     hideOnSinglePage: true,
                                 }}
+                                style={{ marginTop: '1vh'}}
                                 dataSource={favoriteList}
                                 renderItem={(item) => (
                                     <List.Item key={item.VideoId} style={{textAlign: 'left'}}>
@@ -447,12 +461,12 @@ const Home = () => {
                                 )}
                             />
                         )}
-                        <Button type="primary" style={{margin: '20px', fontFamily: 'Orbitron'}} onClick={() => {
+                        <Button type="primary" style={{margin: '1.4vw', fontFamily: 'Orbitron'}} onClick={() => {
                             setModal_status(1)
                         }}>
                             Change User's Information
                         </Button>
-                        <Button type="primary" style={{margin: '20px', fontFamily: 'Orbitron'}} onClick={() => {
+                        <Button type="primary" style={{margin: '1.4vw', fontFamily: 'Orbitron'}} onClick={() => {
                             setUserId(null);
                             setUserAvatar(null);
                             setUserGender(null);
@@ -522,7 +536,7 @@ const Home = () => {
                             userName:
                         </span>}
                         name="userName"
-                        style={{width: '400px', marginTop: '20px', fontFamily: 'Orbitron'}}
+                        style={{width: '25vw', marginTop: '2vh', fontFamily: 'Orbitron'}}
                     >
                         <Input placeholder={userName}/>
                     </Form.Item>
@@ -531,7 +545,7 @@ const Home = () => {
                             Gender:
                         </span>}
                         name="userGender"
-                        style={{width: '400px', marginTop: '20px', fontFamily: 'Orbitron'}}
+                        style={{width: '25vw', marginTop: '2vh', fontFamily: 'Orbitron'}}
                     >
                         <Input placeholder={userGender}/>
                     </Form.Item>
@@ -540,7 +554,7 @@ const Home = () => {
                             Password:
                         </span>}
                         name="userPassword"
-                        style={{width: '400px', marginTop: '20px', fontFamily: 'Orbitron'}}
+                        style={{width: '25vw', marginTop: '2vh', fontFamily: 'Orbitron'}}
                     >
                         <Input.Password placeholder="*********"/>
                     </Form.Item>
@@ -548,26 +562,26 @@ const Home = () => {
             </Modal>
             <Layout>
                 <Sider style={siderStyle} width={460}>
-                    <Space direction="vertical" size={10} style={{display: 'flex'}}>
-                        <Search placeholder="Search Your Video" style={{width: '300px', marginTop: '50px'}}
+                    <Space direction="vertical" size="small" style={{display: 'flex'}}>
+                        <Search placeholder="Search Your Video" style={{width: '23vw', marginTop: '30px'}}
                                 onSearch={(value) => {
                                     setSearch_value(value);
                                 }}/>
-                        <Card style={{margin: '12px'}}>
+                        <Card style={{marginLeft: "1vw", marginRight: "1vw", marginTop: "60px"}}>
                             <Title level={4} style={{
-                                marginTop: '5px',
+                                marginTop: '1vh',
                                 fontFamily: 'Dancing Script',
                                 display: 'flex',
-                                margin: '12px'
+                                margin: '1vw'
                             }}>
-                                TOP 10 Videos
+                                TOP 10 {tile_or_channel === "Title"? "Videos" : "Channels"}
                             </Title>
-                            <Space direction="horizontal" size={12} style={{display: 'flex'}}>
+                            <Space direction="horizontal" size={6} style={{display: 'flex'}}>
                                 <Select
                                     defaultValue="BR"
                                     style={{
                                         width: 97,
-                                        marginTop: '5px'
+                                        marginTop: '1vh'
                                     }}
                                     onChange={changeRegion}
                                     options={[
@@ -620,14 +634,14 @@ const Home = () => {
                                     defaultValue="Film & Animation"
                                     style={{
                                         width: 97,
-                                        marginTop: '5px'
+                                        marginTop: '1vh'
                                     }}
                                     onChange={changeCategory}
                                     options={category}
                                 />
                                 <Radio.Group value={tile_or_channel} onChange={changeTitle_or_channel} style={{
                                     width: 170,
-                                    marginTop: '5px'
+                                    marginTop: '1vh'
                                 }}>
                                     <Radio.Button value="Title">Title</Radio.Button>
                                     <Radio.Button value="ChannelTitle">ChannelTitle</Radio.Button>
@@ -635,7 +649,7 @@ const Home = () => {
                             </Space>
                             <Table
                                 style={{
-                                    marginTop: '5px'
+                                    marginTop: '1vh'
                                 }}
                                 columns={Top_10}
                                 dataSource={top10_table}
@@ -643,24 +657,24 @@ const Home = () => {
                                 pagination={{hideOnSinglePage: true}}
                             />
                         </Card>
-                        <Card style={{margin: '12px'}}>
+                        <Card style={{marginLeft: '1vw', marginRight: "1vw", marginTop: "20px"}}>
                             <Space direction='horizontals'>
                                 <Title level={4} style={{
-                                    marginTop: '5px',
+                                    marginTop: '1vh',
                                     fontFamily: 'Dancing Script',
                                     display: 'flex',
-                                    margin: '12px'
+                                    margin: '1vw'
                                 }}>
                                     Weekly Best Watch
                                 </Title>
-                                <div style={{width: '65px'}}>
+                                <div style={{width: '3vw'}}>
 
                                 </div>
                                 <Select
                                     defaultValue={"Last Week"}
                                     style={{
                                         width: 130,
-                                        marginTop: '10px'
+                                        marginTop: '1.5vh'
                                     }}
                                     onChange={(value) => {
                                         setWeek(value);
@@ -670,7 +684,7 @@ const Home = () => {
                             </Space>
                             <Table
                                 style={{
-                                    marginTop: '5px'
+                                    marginTop: '1vh'
                                 }}
                                 columns={weekly_best}
                                 dataSource={weekly_best_table}
@@ -682,30 +696,37 @@ const Home = () => {
                 </Sider>
                 <Layout>
                     <Header style={headerStyle}>
-                        <Space direction="horizontal">
-                            <div style={{width: '270px'}}/>
-                            <Title style={{color: 'white', fontFamily: 'Dancing Script'}}>
-                                Youtube Best Collection
-                            </Title>
-                            <div style={{width: '230px'}}/>
-                            {(userAvatar) ? (
-                                <Avatar src={userAvatar} size={50} icon={<UserOutlined/>} onClick={() => {
-                                    setDrawerOpen(1);
-                                }}/>
-                            ) : (
-                                <Avatar size={50} icon={<UserOutlined/>} onClick={() => {
-                                    setDrawerOpen(1);
-                                }}/>
-                            )}
-                            <div style={{margin: '10px', color: 'black', fontFamily: 'Orbitron'}}> {userName} </div>
-                        </Space>
-                        <Space direction="horizontal" size={15} style={{display: 'flex'}}>
+                        <Row>
+                            <Col span = {20} style={{marginTop: "1.5vh"}}>
+                                <Title style={{fontSize:'35px', color: 'white', fontFamily: 'Dancing Script'}} onClick={() => setSearch_value(null)}>
+                                    <a href = "" style={{color: "white"}}>
+                                        Youtube Best Collection
+                                    </a>
+                                </Title>
+                            </Col>
+                            <Col span = {4} style={{marginTop: "10px"}}>
+                                <Space>
+                                    {(userAvatar) ? (
+                                        <Avatar src={userAvatar} size={50} icon={<UserOutlined/>} onClick={() => {
+                                            setDrawerOpen(1);
+                                        }}/>
+                                    ) : (
+                                        <Avatar size={50} icon={<UserOutlined/>} onClick={() => {
+                                            setDrawerOpen(1);
+                                        }}/>
+                                    )}
+
+                                    <div style={{margin: '1vw', color: 'black', fontFamily: 'Orbitron'}}> {userName} </div>
+                                </Space>
+                            </Col>
+                        </Row>
+                        <Flex direction="horizontal" style={{display: 'flex'}}>
                             {(channel_main === null) ? (
-                                <Tag bordered={false} color="geekblue" style={{width: "200px", textAlign: 'center'}}>
+                                <Tag bordered={false} color="geekblue" style={{width: "10vw", textAlign: 'center', margin: "1vh", padding: "5px"}}>
                                     Channel
                                 </Tag>
                             ) : (
-                                <Tag bordered={false} color="geekblue" style={{width: "200px", textAlign: 'center'}}
+                                <Tag bordered={false} color="geekblue" style={{width: "10vw", textAlign: 'center', margin: "1vh", padding: "5px"}}
                                      onClick={() => {
                                          setChannel_main(null);
                                      }}>
@@ -717,8 +738,8 @@ const Home = () => {
                                 <Select
                                     defaultValue="Category"
                                     style={{
-                                        width: 150,
-                                        marginTop: '5px'
+                                        width: '10vw',
+                                        marginTop: '1vh'
                                     }}
                                     onChange={(value) => {
                                         if (value === 100) {
@@ -732,17 +753,17 @@ const Home = () => {
                             ) : (
                                 <Tag bordered={false} color="cyan" onClick={() => {
                                     setCategory_main(null);
-                                }} style={{width: "142px", textAlign: 'center'}}>
+                                }} style={{width: "9.54vw", textAlign: 'center'}}>
                                     {category[category_main]['label']}
                                 </Tag>
                             )
                             }
-                            {(search_value) ? (<div style={{width: '100px'}}/>) : ((region_main === null) ? (
+                            {(search_value) ? (<div style={{width: '10vw'}}/>) : ((region_main === null) ? (
                                 <Select
                                     defaultValue="Region"
                                     style={{
-                                        width: 100,
-                                        marginTop: '10px',
+                                        width: '10vw',
+                                        margin: '1vh',
                                     }}
                                     onChange={(value) => {
                                         if (value === "Region") {
@@ -804,18 +825,18 @@ const Home = () => {
                             ) : (
                                 <Tag bordered={false} color="orange" onClick={() => {
                                     setRegion_main(null);
-                                }} style={{width: "92px", textAlign: 'center'}}>
+                                }} style={{width: "9.54vw", textAlign: 'center'}}>
                                     {region_main}
                                 </Tag>
                             ))
                             }
-                            <div style={{width: '380px'}}/>
+                            <div style={{width: '18.5vw'}}/>
                             {(search_value) ? (
                                 <Select
                                     defaultValue="Relevance"
                                     style={{
-                                        width: 160,
-                                        marginTop: '10px',
+                                        width: '10vw',
+                                        marginTop: '1vh',
                                     }}
                                     onChange={(value) => {
                                         setSort_main(value);
@@ -843,8 +864,8 @@ const Home = () => {
                                 <Select
                                     defaultValue="PublishedAt"
                                     style={{
-                                        width: 160,
-                                        marginTop: '10px',
+                                        width: '10vw',
+                                        marginTop: '1vh',
                                     }}
                                     onChange={(value) => {
                                         setSort_main(value);
@@ -866,39 +887,38 @@ const Home = () => {
                                 />
                             )}
 
-                        </Space>
+                        </Flex>
                     </Header>
                     <Content style={contentStyle}>
-                        <Card style={{margin: '15px', marginTop: '43px'}}>
+                        <Card style={{margin: '2.2vw', marginTop: '8vh'}}>
                             {loading ? <Spin/> :
                                 <List
                                     itemLayout="vertical"
                                     size="large"
                                     pagination={{
-                                        pageSize: 5,
+                                        pageSize: 6,
                                     }}
                                     dataSource={week_weekly}
                                     renderItem={(item) => (
                                         <List.Item key={item.VideoId} style={{textAlign: 'left'}}>
-                                            <Space direction="horizontal">
-                                                <Image width={400} height={200} src={item.ThumbnailLink}/>
-                                                <Space size={5} direction="vertical">
+                                            <Flex direction="horizontal">
+                                                <Image width={'20vw'} height={'20.5vh'} preview={false} src={item.ThumbnailLink}/>
+                                                <Space size={'3vh'} direction="vertical">
                                                     <Title level={4} style={{
-                                                        margin: '12px',
-                                                        width: '450px',
-                                                        marginTop: '3px',
+                                                        margin: '1vw',
+                                                        width: '28vw',
+                                                        marginTop: '1vh',
                                                         fontFamily: 'Permanent Marker'
                                                     }}>
                                                         {item.Title}
                                                     </Title>
-                                                    <div style={{margin: '15px'}}> Published
-                                                        Date: {item.PublishedAt}</div>
-                                                    <div style={{margin: '15px'}} onClick={() => {
-                                                        window.location.href = `https://www.youtube.com/watch?v=${item.VideoId}`;
-                                                    }}> VideoID : {item.VideoId}</div>
-                                                    <Space direction="horizontal">
+                                                    <div style={{margin: '1vw'}}> <ClockCircleOutlined /> {item.PublishedAt}</div>
+                                                    <div style={{margin: '1vw'}}>
+                                                        YouTube Link: <a href = {`https://www.youtube.com/watch?v=${item.VideoId}`} target="_blank"> <ExportOutlined /> </a>
+                                                    </div>
+                                                    <Space size={'1.5vw'} direction="horizontal">
                                                         <Tag bordered={false} color="geekblue"
-                                                             style={{margin: '12px', fontFamily: 'Arial'}}
+                                                             style={{margin: '0.8vw', fontFamily: 'Arial'}}
                                                              onClick={() => {
                                                                  setChannel_main(item.ChannelId);
                                                                  setCurrent_channel(item.ChannelTitle);
@@ -910,53 +930,57 @@ const Home = () => {
                                                         }}>
                                                             {item.CategoryTitle}
                                                         </Tag>
-                                                        <Tag bordered={false} color="orange" onClick={() => {
-                                                            setRegion_main(item.Region);
-                                                        }}>
-                                                            {item.Region}
-                                                        </Tag>
+                                                        {
+                                                            item.Region ? item.Region.map(region =>
+                                                                <Tag key={region} bordered={false} color="orange" onClick={() => {
+                                                                    setRegion_main(region);
+                                                                }}>
+                                                                    {region}
+                                                                </Tag>
+                                                            ): null
+                                                        }
                                                     </Space>
                                                 </Space>
-                                                <Space size={30} direction="vertical" style={{margin: '20px'}}>
-                                                    <Space direction="horizontal" size={10}>
+                                                <Space size={40} direction="vertical" style={{margin: '1vw'}}>
+                                                    <Space direction="horizontal" size={'small'}>
                                                         <HeartOutlined
-                                                            style={{fontSize: '20px', color: 'red', marginTop: '5px'}}/>
-                                                        <div style={{margin: '5px'}}>
+                                                            style={{fontSize: '1vw', color: 'red', marginTop: '0.8vh'}}/>
+                                                        <div style={{margin: '0.3vw'}}>
                                                             {item.Likes}
                                                         </div>
                                                         {(item.LikesChange < 0) ? (
                                                             <Space direction="horizontal" size={1}>
                                                                 <ArrowDownOutlined
-                                                                    style={{marginTop: '5px', color: 'red'}}/>
-                                                                <div style={{margin: '1px'}}>
+                                                                    style={{fontSize: '1vw', marginTop: '1vh', color: 'red'}}/>
+                                                                <div style={{margin: '0.3vw'}}>
                                                                     {item.LikesChange}
                                                                 </div>
                                                             </Space>
                                                         ) : (
                                                             <Space direction="horizontal" size={1}>
                                                                 <ArrowUpOutlined
-                                                                    style={{marginTop: '5px', color: 'red'}}/>
-                                                                <div style={{margin: '1px'}}>
+                                                                    style={{ fontSize: '1vw', marginTop: '0.6vh', color: 'red'}}/>
+                                                                <div style={{margin: '0.3vw'}}>
                                                                     {item.LikesChange}
                                                                 </div>
                                                             </Space>
                                                         )}
                                                     </Space>
-                                                    <Space direction="horizontal" size={10}>
+                                                    <Space direction="horizontal" size={'small'}>
                                                         <EyeOutlined
                                                             style={{
-                                                                fontSize: '20px',
+                                                                fontSize: '1vw',
                                                                 color: 'orange',
-                                                                marginTop: '7px'
+                                                                marginTop: '0.8vh'
                                                             }}/>
-                                                        <div style={{margin: '5px'}}>
+                                                        <div style={{margin: '0.3vw'}}>
                                                             {item.ViewCount}
                                                         </div>
                                                         {item.ViewCountChange === 0 ? null : (
                                                             <Space direction="horizontal" size={1}>
                                                                 <ArrowUpOutlined
-                                                                    style={{marginTop: '5px', color: 'orange'}}/>
-                                                                <div style={{margin: '1px'}}>
+                                                                    style={{fontSize: '1vw', marginTop: '0.6vh', color: 'orange'}}/>
+                                                                <div style={{margin: '0.3vw'}}>
                                                                     {item.ViewCountChange}
                                                                 </div>
                                                             </Space>
@@ -967,9 +991,9 @@ const Home = () => {
                                                             {favoriteList.map(item => item.VideoId).includes(item.VideoId) === false ? (
                                                                 <>
                                                                     <StarOutlined style={{
-                                                                        fontSize: '20px',
+                                                                        fontSize: '1vw',
                                                                         color: 'gold',
-                                                                        marginTop: '7px'
+                                                                        marginTop: '1vh'
                                                                     }} onClick={() => {
                                                                         axios.post(`${baseurl}favoriteInsert`, {
                                                                             "VideoId": item.VideoId,
@@ -991,16 +1015,16 @@ const Home = () => {
                                                                             }
                                                                         )
                                                                     }}/>
-                                                                    <div style={{margin: '5px'}}>
-                                                                        Add to your Favorite
+                                                                    <div style={{margin: '0.2vw', marginTop:'1vh'}}>
+                                                                        Add to Favorite
                                                                     </div>
                                                                 </>
                                                             ) : (
                                                                 <>
                                                                     <StarFilled style={{
-                                                                        fontSize: '20px',
+                                                                        fontSize: '1vw',
                                                                         color: 'gold',
-                                                                        marginTop: '7px'
+                                                                        marginTop: '1vh'
                                                                     }} onClick={() => {
                                                                         axios.delete(`${baseurl}favoriteDelete?VideoId=${item.VideoId}&UserId=${userId}`, {
                                                                             data: {
@@ -1021,7 +1045,7 @@ const Home = () => {
                                                                         ).catch((error) => {
                                                                         });
                                                                     }}/>
-                                                                    <div style={{margin: '5px'}}>
+                                                                    <div style={{margin: '0.2vw', marginTop:'1vh'}}>
                                                                         Cancel
                                                                     </div>
                                                                 </>
@@ -1029,7 +1053,7 @@ const Home = () => {
                                                         </Space>
                                                     ) : null}
                                                 </Space>
-                                            </Space>
+                                            </Flex>
                                         </List.Item>
                                     )}
                                 />
