@@ -18,7 +18,7 @@ import {
     Drawer,
     Button,
     Modal,
-    message, Upload, Spin,
+    message, Upload, Spin, Flex, Row, Col,
 } from "antd";
 import {
     HeartOutlined,
@@ -26,9 +26,8 @@ import {
     ArrowUpOutlined,
     StarOutlined,
     StarFilled,
-    SearchOutlined,
     ArrowDownOutlined,
-    UserOutlined, LoadingOutlined, PlusOutlined, UploadOutlined, ClockCircleOutlined, ExportOutlined
+    UserOutlined, LoadingOutlined, PlusOutlined, ClockCircleOutlined, ExportOutlined
 } from "@ant-design/icons";
 import axios from "axios";
 import {NavLink, useNavigate, useLocation} from "react-router-dom";
@@ -128,8 +127,8 @@ const Home = () => {
     };
     const siderStyle = {
         textAlign: 'center',
-        lineHeight: '12.5vh',
-        minHeight: '100vh',
+        lineHeight: '11vh',
+        minHeight: '960px',
         color: '#fff',
         backgroundColor: '#E5FCD2',
     };
@@ -563,12 +562,12 @@ const Home = () => {
             </Modal>
             <Layout>
                 <Sider style={siderStyle} width={460}>
-                    <Space direction="vertical" size={10} style={{display: 'flex'}}>
-                        <Search placeholder="Search Your Video" style={{width: '23vw', marginTop: '5vh'}}
+                    <Space direction="vertical" size="small" style={{display: 'flex'}}>
+                        <Search placeholder="Search Your Video" style={{width: '23vw', marginTop: '30px'}}
                                 onSearch={(value) => {
                                     setSearch_value(value);
                                 }}/>
-                        <Card style={{margin: '1vw'}}>
+                        <Card style={{marginLeft: "1vw", marginRight: "1vw", marginTop: "60px"}}>
                             <Title level={4} style={{
                                 marginTop: '1vh',
                                 fontFamily: 'Dancing Script',
@@ -658,7 +657,7 @@ const Home = () => {
                                 pagination={{hideOnSinglePage: true}}
                             />
                         </Card>
-                        <Card style={{margin: '1vw'}}>
+                        <Card style={{marginLeft: '1vw', marginRight: "1vw", marginTop: "20px"}}>
                             <Space direction='horizontals'>
                                 <Title level={4} style={{
                                     marginTop: '1vh',
@@ -697,32 +696,37 @@ const Home = () => {
                 </Sider>
                 <Layout>
                     <Header style={headerStyle}>
-                        <Space direction="horizontal">
-                            <div style={{width: '15vw'}}/>
-                            <Title style={{color: 'white', fontFamily: 'Dancing Script'}} onClick={() => setSearch_value(null)}>
-                                <a href = "" style={{color: "white"}}>
-                                    Youtube Best Collection
-                                </a>
-                            </Title>
-                            <div style={{width: '13vw'}}/>
-                            {(userAvatar) ? (
-                                <Avatar src={userAvatar} size={50} icon={<UserOutlined/>} onClick={() => {
-                                    setDrawerOpen(1);
-                                }}/>
-                            ) : (
-                                <Avatar size={50} icon={<UserOutlined/>} onClick={() => {
-                                    setDrawerOpen(1);
-                                }}/>
-                            )}
-                            <div style={{margin: '1vw', color: 'black', fontFamily: 'Orbitron'}}> {userName} </div>
-                        </Space>
-                        <Space direction="horizontal" size={15} style={{display: 'flex'}}>
+                        <Row>
+                            <Col span = {20} style={{marginTop: "1.5vh"}}>
+                                <Title style={{fontSize:'35px', color: 'white', fontFamily: 'Dancing Script'}} onClick={() => setSearch_value(null)}>
+                                    <a href = "" style={{color: "white"}}>
+                                        Youtube Best Collection
+                                    </a>
+                                </Title>
+                            </Col>
+                            <Col span = {4} style={{marginTop: "10px"}}>
+                                <Space>
+                                    {(userAvatar) ? (
+                                        <Avatar src={userAvatar} size={50} icon={<UserOutlined/>} onClick={() => {
+                                            setDrawerOpen(1);
+                                        }}/>
+                                    ) : (
+                                        <Avatar size={50} icon={<UserOutlined/>} onClick={() => {
+                                            setDrawerOpen(1);
+                                        }}/>
+                                    )}
+
+                                    <div style={{margin: '1vw', color: 'black', fontFamily: 'Orbitron'}}> {userName} </div>
+                                </Space>
+                            </Col>
+                        </Row>
+                        <Flex direction="horizontal" style={{display: 'flex'}}>
                             {(channel_main === null) ? (
-                                <Tag bordered={false} color="geekblue" style={{width: "10vw", textAlign: 'center'}}>
+                                <Tag bordered={false} color="geekblue" style={{width: "10vw", textAlign: 'center', margin: "1vh", padding: "5px"}}>
                                     Channel
                                 </Tag>
                             ) : (
-                                <Tag bordered={false} color="geekblue" style={{width: "10vw", textAlign: 'center'}}
+                                <Tag bordered={false} color="geekblue" style={{width: "10vw", textAlign: 'center', margin: "1vh", padding: "5px"}}
                                      onClick={() => {
                                          setChannel_main(null);
                                      }}>
@@ -759,7 +763,7 @@ const Home = () => {
                                     defaultValue="Region"
                                     style={{
                                         width: '10vw',
-                                        marginTop: '1vh',
+                                        margin: '1vh',
                                     }}
                                     onChange={(value) => {
                                         if (value === "Region") {
@@ -883,10 +887,10 @@ const Home = () => {
                                 />
                             )}
 
-                        </Space>
+                        </Flex>
                     </Header>
                     <Content style={contentStyle}>
-                        <Card style={{margin: '2.2vw', marginTop: '5vh'}}>
+                        <Card style={{margin: '2.2vw', marginTop: '8vh'}}>
                             {loading ? <Spin/> :
                                 <List
                                     itemLayout="vertical"
@@ -897,7 +901,7 @@ const Home = () => {
                                     dataSource={week_weekly}
                                     renderItem={(item) => (
                                         <List.Item key={item.VideoId} style={{textAlign: 'left'}}>
-                                            <Space direction="horizontal">
+                                            <Flex direction="horizontal">
                                                 <Image width={'20vw'} height={'20.5vh'} preview={false} src={item.ThumbnailLink}/>
                                                 <Space size={'3vh'} direction="vertical">
                                                     <Title level={4} style={{
@@ -1049,7 +1053,7 @@ const Home = () => {
                                                         </Space>
                                                     ) : null}
                                                 </Space>
-                                            </Space>
+                                            </Flex>
                                         </List.Item>
                                     )}
                                 />
