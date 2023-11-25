@@ -392,13 +392,13 @@ const Home = () => {
                     <>
                         <Title level={4} style={{margin: '1vw', fontFamily: 'Orbitron'}}> Please Login First </Title>
                         <Space direction='horizontal'>
-                            <Button type="primary" style={{margin: '1vw', width: '5.3vw', fontFamily: 'Orbitron'}}
+                            <Button type="primary" style={{margin: '1vw', fontFamily: 'Orbitron'}}
                                     onClick={() => {
                                         navigate('/LogIn');
                                     }}>
                                 LogIn
                             </Button>
-                            <Button type="primary" style={{margin: '0.05vw', width: '5.3vw', fontFamily: 'Orbitron'}}
+                            <Button type="primary" style={{margin: '0.05vw', fontFamily: 'Orbitron'}}
                                     onClick={() => {
                                         navigate('/Register');
                                     }}>
@@ -409,13 +409,13 @@ const Home = () => {
                 ) : (
                     <Space direction='vertical' size={1}>
                         <Title level={4} style={{margin: '1.4vw', fontFamily: 'Orbitron'}}> UserInformation </Title>
-                        <div style={{margin: '1.4vw', fontFamily: 'Orbitron'}}>
+                        <div style={{margin: '1.4vw', fontFamily: 'Orbitron', color: "black"}}>
                             User Name: {userName}
                         </div>
-                        <div style={{margin: '1.4vw', fontFamily: 'Orbitron'}}>
+                        <div style={{margin: '1.4vw', fontFamily: 'Orbitron', color: "black"}}>
                             User Gender: {(userGender) ? (userGender) : ("Undefined")}
                         </div>
-                        <div style={{margin: '1.4vw', fontFamily: 'Orbitron'}}>
+                        <div style={{margin: '1.4vw', fontFamily: 'Orbitron', color: "black"}}>
                             User Favorite:
                         </div>
                         {(favoriteList === null) ? null : (
