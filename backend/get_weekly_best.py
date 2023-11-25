@@ -11,7 +11,7 @@ def lambda_handler(event, context):
 
         assert Week is not None, "Week is empty"
 
-        Week = datetime.datetime.strptime(Week, "%Y-%m-%d %H:%M:%S")
+        Week = datetime.datetime.strptime(Week, "%Y-%m-%d")
         Week = Week - datetime.timedelta(days = (Week.weekday() + 1) % 7,
                                          hours = Week.hour,
                                          minutes = Week.minute,
@@ -20,26 +20,17 @@ def lambda_handler(event, context):
         w = query(f"select Week from WeeklyBest where Week = timestamp('{Week}')")
         assert len(w) > 0, "Week does not exist"
         
-        result = query(f"select * from WeeklyBest natural join Video natural join Channel natural join Category where Week = timestamp('{Week}')")
+        result = query(f"select VideoId, Week, Title, max(ViewCount), max(Likes) from WeeklyBest natural join Video where Week = timestamp('{Week}') group by VideoId, Title, Week")
         
         outputs = []
         
-        for [CategoryId, ChannelId, VideoId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, _, _, _, ChannelTitle, CategoryTitle] in result:
+        for [VideoId, Week, Title, ViewCount, Likes] in result:
             outputs.append({
                 "VideoId": VideoId,
-                "Region": Region,
+                "Week": Week,
                 "Title": Title,
-                "PublishedAt": PublishedAt,
-                "Likes": Likes,
-                "TrendingDate": TrendingDate,
                 "ViewCount": ViewCount,
-                "ThumbnailLink": ThumbnailLink,
-                "LikesChange": LikesChange,
-                "ViewCountChange": ViewCountChange,
-                "ChannelId": ChannelId, 
-                "ChannelTitle": ChannelTitle,
-                "CategoryId": CategoryId,
-                "CategoryTitle": CategoryTitle
+                "Likes": Likes
             })
     except Exception as e:
         error = e

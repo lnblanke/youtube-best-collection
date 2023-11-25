@@ -14,7 +14,7 @@ def lambda_handler(event, context):
     
         cur = (datetime.datetime.now() - datetime.timedelta(days = 7)).strftime('%Y/%m/%d %H:%M:%S')
     
-        sql = f"SELECT * from Video natural join Channel natural join Category where TrendingDate >= timestamp(\"{cur}\")" 
+        sql = f"SELECT CategoryId, ChannelId, VideoId, group_concat(Region), Title, PublishedAt, max(Likes), TrendingDate, max(ViewCount), ThumbnailLink, avg(LikesChange), avg(ViewCountChange), ChannelTitle, CategoryName from Video natural join Channel natural join Category where TrendingDate >= timestamp(\"{cur}\")" 
         
         assert SortBy.lower() in ['viewcount', 'likes', 'publishedat', 'trendingdate'], f"Invalid sort column: {SortBy}"
     
@@ -34,24 +34,24 @@ def lambda_handler(event, context):
             channel = query(f"select ChannelId from Channel where ChannelId = '{ChannelId}'")
             assert len(channel) > 0, "Channel with ChannelId does not exist"
 
-        sql += f" ORDER BY {SortBy} DESC" 
+        sql += f" group by VideoId, CategoryId, ChannelId ORDER BY {SortBy} DESC" 
     
         result = query(sql)
         
         outputs = []
         
-        for [CategoryId, ChannelId, VideoId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, _, _, _, ChannelTitle, CategoryTitle] in result:
+        for [CategoryId, ChannelId, VideoId, Region, Title, PublishedAt, Likes, TrendingDate, ViewCount, ThumbnailLink, LikesChange, ViewCountChange, ChannelTitle, CategoryTitle] in result:
             outputs.append({
                 "VideoId": VideoId,
-                "Region": Region,
+                "Region": Region.split(","),
                 "Title": Title,
                 "PublishedAt": PublishedAt,
                 "Likes": Likes,
                 "TrendingDate": TrendingDate,
                 "ViewCount": ViewCount,
                 "ThumbnailLink": ThumbnailLink,
-                "LikesChange": LikesChange,
-                "ViewCountChange": ViewCountChange,
+                "LikesChange": int(LikesChange),
+                "ViewCountChange": int(ViewCountChange),
                 "ChannelId": ChannelId, 
                 "ChannelTitle": ChannelTitle,
                 "CategoryId": CategoryId,
