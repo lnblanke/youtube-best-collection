@@ -50,7 +50,7 @@ const Home = () => {
     const [search_value, setSearch_value] = useState("");
     const [week_weekly, setWeek_weekly] = useState([]);
     const [region_main, setRegion_main] = useState(null);
-    const [category_main, setCategory_main] = useState(null);
+    const [category_main, setCategory_main] = useState("");
     const [channel_main, setChannel_main] = useState(null);
     const [sort_main, setSort_main] = useState("PublishedAt");
     const [category_blank, setCategory_blank] = useState([]);
@@ -340,7 +340,7 @@ const Home = () => {
             if (sort_main === 'Relevance') {
                 setSort_main('PublishedAt');
                 setLoading(true)
-                axios.get(`${baseurl}sortTrending?SortBy=PublishedAt&Region=${region_main || ""}&CategoryId=${category_main || ""}&ChannelId=${channel_main || ""}`, {
+                axios.get(`${baseurl}sortTrending?SortBy=PublishedAt&Region=${region_main || ""}&CategoryId=${category_main}&ChannelId=${channel_main || ""}`, {
                     headers: {
                         "x-api-key": "urLOROFoXZC3weFVmAmV7l5QtbEMOi67kBBr9UI8"
                     }
@@ -350,7 +350,7 @@ const Home = () => {
                 });
             } else {
                 setLoading(true)
-                axios.get(`${baseurl}sortTrending?SortBy=${sort_main || ""}&Region=${region_main || ""}&CategoryId=${category_main || ""}&ChannelId=${channel_main || ""}`, {
+                axios.get(`${baseurl}sortTrending?SortBy=${sort_main || ""}&Region=${region_main || ""}&CategoryId=${category_main}&ChannelId=${channel_main || ""}`, {
                     headers: {
                         "x-api-key": "urLOROFoXZC3weFVmAmV7l5QtbEMOi67kBBr9UI8"
                     }
@@ -361,7 +361,7 @@ const Home = () => {
             }
         } else {
             setLoading(true)
-            axios.get(`${baseurl}searchVideo?Prompt=${search_value}&SortBy=${sort_main || ""}&Region=${region_main || ""}&CategoryId=${category_main || ""}&ChannelId=${channel_main || ""}`, {
+            axios.get(`${baseurl}searchVideo?Prompt=${search_value}&SortBy=${sort_main || ""}&Region=${region_main || ""}&CategoryId=${category_main}&ChannelId=${channel_main || ""}`, {
                 headers: {
                     "x-api-key": "urLOROFoXZC3weFVmAmV7l5QtbEMOi67kBBr9UI8"
                 }
@@ -561,13 +561,13 @@ const Home = () => {
                 </Form>
             </Modal>
             <Layout>
-                <Sider style={siderStyle} width={460}>
+                <Sider style={siderStyle} width="32vw">
                     <Space direction="vertical" size="small" style={{display: 'flex'}}>
                         <Search placeholder="Search Your Video" style={{width: '23vw', marginTop: '30px'}}
                                 onSearch={(value) => {
                                     setSearch_value(value);
                                 }}/>
-                        <Card style={{marginLeft: "1vw", marginRight: "1vw", marginTop: "60px"}}>
+                        <Card style={{marginLeft: "1vw", marginRight: "1vw", marginTop: "58px"}}>
                             <Title level={4} style={{
                                 marginTop: '1vh',
                                 fontFamily: 'Dancing Script',
@@ -576,11 +576,11 @@ const Home = () => {
                             }}>
                                 TOP 10 {tile_or_channel === "Title"? "Videos" : "Channels"}
                             </Title>
-                            <Space direction="horizontal" size={6} style={{display: 'flex'}}>
+                            <Space direction="horizontal" size={1} style={{display: 'flex'}}>
                                 <Select
                                     defaultValue="BR"
                                     style={{
-                                        width: 97,
+                                        width: 65,
                                         marginTop: '1vh'
                                     }}
                                     onChange={changeRegion}
@@ -640,7 +640,7 @@ const Home = () => {
                                     options={category}
                                 />
                                 <Radio.Group value={tile_or_channel} onChange={changeTitle_or_channel} style={{
-                                    width: 170,
+                                    width: "18vw",
                                     marginTop: '1vh'
                                 }}>
                                     <Radio.Button value="Title">Title</Radio.Button>
@@ -734,7 +734,7 @@ const Home = () => {
                                 </Tag>
                             )
                             }
-                            {(category_main === null) ? (
+                            {(category_main === "") ? (
                                 <Select
                                     defaultValue="Category"
                                     style={{
@@ -743,7 +743,7 @@ const Home = () => {
                                     }}
                                     onChange={(value) => {
                                         if (value === 100) {
-                                            setCategory_main(null);
+                                            setCategory_main("");
                                         } else {
                                             setCategory_main(value);
                                         }
@@ -752,8 +752,8 @@ const Home = () => {
                                 />
                             ) : (
                                 <Tag bordered={false} color="cyan" onClick={() => {
-                                    setCategory_main(null);
-                                }} style={{width: "9.54vw", textAlign: 'center'}}>
+                                    setCategory_main("");
+                                }} style={{width: "9.54vw", textAlign: 'center', margin: "1vh", padding: "5px"}}>
                                     {category[category_main]['label']}
                                 </Tag>
                             )
@@ -825,7 +825,7 @@ const Home = () => {
                             ) : (
                                 <Tag bordered={false} color="orange" onClick={() => {
                                     setRegion_main(null);
-                                }} style={{width: "9.54vw", textAlign: 'center'}}>
+                                }} style={{width: "9.54vw", textAlign: 'center', margin: "1vh", padding: "5px"}}>
                                     {region_main}
                                 </Tag>
                             ))
@@ -903,7 +903,7 @@ const Home = () => {
                                         <List.Item key={item.VideoId} style={{textAlign: 'left'}}>
                                             <Flex direction="horizontal">
                                                 <Image width={'20vw'} height={'20.5vh'} preview={false} src={item.ThumbnailLink}/>
-                                                <Space size={'3vh'} direction="vertical">
+                                                <Space size={'3vh'} direction="vertical" wrap>
                                                     <Title level={4} style={{
                                                         margin: '1vw',
                                                         width: '28vw',
@@ -916,23 +916,23 @@ const Home = () => {
                                                     <div style={{margin: '1vw'}}>
                                                         YouTube Link: <a href = {`https://www.youtube.com/watch?v=${item.VideoId}`} target="_blank"> <ExportOutlined /> </a>
                                                     </div>
-                                                    <Space size={'1.5vw'} direction="horizontal">
+                                                    <Space size={'1.5vw'} direction="horizontal" wrap style={{marginLeft: "0.6vw"}}>
                                                         <Tag bordered={false} color="geekblue"
-                                                             style={{margin: '0.8vw', fontFamily: 'Arial'}}
+                                                             style={{margin: '0.2vw', fontFamily: 'Arial'}}
                                                              onClick={() => {
                                                                  setChannel_main(item.ChannelId);
                                                                  setCurrent_channel(item.ChannelTitle);
                                                              }}>
                                                             {item.ChannelTitle}
                                                         </Tag>
-                                                        <Tag bordered={false} color="cyan" onClick={() => {
+                                                        <Tag bordered={false} color="cyan" style={{margin: '0.2vw', fontFamily: 'Arial'}} onClick={() => {
                                                             setCategory_main(item.CategoryId);
                                                         }}>
                                                             {item.CategoryTitle}
                                                         </Tag>
                                                         {
                                                             item.Region ? item.Region.map(region =>
-                                                                <Tag key={region} bordered={false} color="orange" onClick={() => {
+                                                                <Tag key={region} bordered={false} color="orange" style = {{margin: "0.2vw"}} onClick={() => {
                                                                     setRegion_main(region);
                                                                 }}>
                                                                     {region}
