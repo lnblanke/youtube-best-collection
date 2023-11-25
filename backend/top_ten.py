@@ -20,13 +20,19 @@ def lambda_handler(event, context):
         
         region = query(f"select Region from Video where Region = '{Region}'")
         assert len(region) > 0, "Region does not exist"
+        
+        if SelectedColumn.lower() == "title":
+            SelectedColumn = "VideoId, Title"
+        else:
+            SelectedColumn = "ChannelId, ChannelTitle"
     
         result = query(f"select {SelectedColumn}, ViewCount, Likes from Video natural join Channel where CategoryId = '{CategoryId}' and Region = '{Region}' and TrendingDate = (select max(TrendingDate) from Video) group by {SelectedColumn} order by {SortBy} DESC limit 10")
     
         outputs = []
     
-        for [title, viewcount, likes] in result:
+        for [Id, title, viewcount, likes] in result:
             outputs.append({
+                "Id": Id,
                 "Title": title,
                 "ViewCount": viewcount,
                 "Likes": likes

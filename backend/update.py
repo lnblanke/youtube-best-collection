@@ -39,7 +39,8 @@ def update_videos(path, time):
             if file[-3:] == "csv":
                 df = pd.read_csv(path + file)
 
-                df.sort_values("trending_date")
+                df = df.sort_values("trending_date", ascending = False)
+
                 df["trending_date"] = pd.to_datetime(df["trending_date"]).dt.tz_localize(None)
                 df["publishedAt"] = pd.to_datetime(df["publishedAt"]).dt.tz_localize(None)
 
@@ -53,14 +54,15 @@ def update_videos(path, time):
                 insert_videos, insert_channel, delete_videos, insert_tags = [], [], [], []
 
                 for _, row in new_df.iterrows():
-                    prev_row = prev_df.loc[df["video_id"] == row.video_id]
+                    prev_row = prev_df.loc[prev_df["video_id"] == row.video_id]
 
                     if len(prev_row) == 0:
                         likes_change = row.likes / (max((row.trending_date - row.publishedAt).days, 0) + 1)
                         viewcount_change = row.view_count / (max((row.trending_date - row.publishedAt).days, 0) + 1)
                     else:
-                        likes_change = (row.likes - prev_row.likes) / ((row.trending_date - prev_row.trending_date).days + 1)
-                        viewcount_change = (row.view_count - prev_row.view_count) / ((row.trending_date - prev_row.trending_date).days + 1)
+                        prev_row = prev_row.iloc[0]
+                        likes_change = (row.likes - prev_row.likes) / (row.trending_date - prev_row.trending_date).days
+                        viewcount_change = (row.view_count - prev_row.view_count) / (row.trending_date - prev_row.trending_date).days
 
                     row.channelTitle = row.channelTitle.replace("\\", "\\\\").replace("\"", "\\\"")
                     
@@ -88,9 +90,9 @@ def update_videos(path, time):
                 # Compute last week data
                 now = datetime.now()
                 cur_week_start = now - timedelta(days = (now.weekday() + 1) % 7,
-                                                          hours = now.hour,
-                                                          minutes = now.minute,
-                                                          seconds = now.second)
+                                                 hours = now.hour,
+                                                 minutes = now.minute,
+                                                 seconds = now.second + 1)
                 last_week_start = cur_week_start - timedelta(days = 7)
 
                 last_week_df = df[(df["trending_date"] >= last_week_start) & (df["trending_date"] < cur_week_start)].reset_index()
@@ -104,8 +106,8 @@ def update_videos(path, time):
                         viewcount_change = row.view_count / (max((row.trending_date - row.publishedAt).days, 0) + 1)
                         likes_change = row.likes / (max((row.trending_date - row.publishedAt).days, 0) + 1)
                     else:
-                        viewcount_change = (row.view_count - last_trending.at[0, "view_count"]) / ((row.trending_date - last_trending.at[0, "trending_date"]).days + 1)
-                        likes_change = (row.likes - last_trending.at[0, "likes"]) / ((row.trending_date - last_trending.at[0, "trending_date"]).days + 1)
+                        viewcount_change = (row.view_count - last_trending.at[0, "view_count"]) / (row.trending_date - last_trending.at[0, "trending_date"]).days
+                        likes_change = (row.likes - last_trending.at[0, "likes"]) / (row.trending_date - last_trending.at[0, "trending_date"]).days
                         
                     try:
                         cursor.execute(f"update Video set WeeklyViewCountChange = {viewcount_change}, WeeklyLikesChange = {likes_change}, TrendingCount = {trending_count} where VideoId = '{row.video_id}' and Region = '{file[:2]}'")
@@ -142,24 +144,46 @@ def update_db(path):
 
     query(f"update Config set Status = 'S' where UpdateItem = 'Video' and UpdateTime = timestamp('{cur_time}')")
 
-def update_weekly_best():
-    pass
+def update_weekly_best(Week: datetime):
+    max_week = query("select max(Week) from Week")[0][0]
+
+    if max_week is not None and datetime.strftime(max_week, '%Y-%m-%d %H:%M:%S') >= datetime.strftime(Week, '%Y-%m-%d %H:%M:%S'):
+        return
+
+    sql_select = f"""SELECT VideoId, sum(TrendingCount * 1000000 * Weight) + 10 * sum(WeeklyLikesChange) / 11 + sum(WeeklyViewCountChange) / 11 as Score
+                    FROM Video NATURAL JOIN RegionWeight 
+                    WHERE TrendingCount > 0 AND VideoId NOT IN (select VideoId from WeeklyBest)
+                    GROUP BY VideoId
+                    ORDER BY Score DESC 
+                    LIMIT 10"""
+
+    videos = query(sql_select)
+
+    for video in videos:
+        video_id = video[0]
+        sql_insert = f"INSERT INTO WeeklyBest (VideoId, Week) VALUES ('{video_id}', timestamp('{datetime.strftime(Week, '%Y-%m-%d %H:%M:%S')}'))"
+        query(sql_insert)
 
 def lambda_handler(event, context):
     error = None
-    # path = yaml.safe_load(open("/opt/config.yaml"))["data"]["path"]
-    path = yaml.safe_load(open("config.yaml"))["data"]["path"]
+    path = yaml.safe_load(open("/opt/config.yaml"))["data"]["path"]
 
     try:
         cursor.execute("start transaction read write")
         update_db(path)
-        update_weekly_best()
+
+        now = datetime.now()
+
+        update_weekly_best(now - timedelta(days = (now.weekday() + 1) % 7 + 7,
+                                     hours = now.hour,
+                                     minutes = now.minute,
+                                     seconds = now.second))
         cursor.execute("commit")
         cursor.close()
     except Exception as e:
         error = e
         cursor.execute("rollback")
-        
+
     return get_request_body("PUT", None, error) 
 
 print(lambda_handler(None, None))

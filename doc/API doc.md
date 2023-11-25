@@ -78,6 +78,7 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 | [getUserInfo](#getUserInfo)       | `GET`    |
 | [getWeeklyBest](#getWeeklyBest)   | `GET`    |
 | [getWeeks](#getWeeks)             | `GET`    |
+| [isFavorite](#isFavorite)         | `GET`    |
 | [searchVideo](#searchVideo)       | `GET`    |
 | [sortTrending](#sortTrending)     | `GET`    |
 | [topTen](#topTen)                 | `GET`    |
@@ -241,7 +242,7 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
 - Sample request body
   ```json
   {
-    "Week": "2023-11-22 11:45:14"
+    "Week": "2023-11-15"
   }
   ```
 - Sample response body
@@ -249,20 +250,11 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   {
     "data": [
         {
-            "VideoId": "shZyg5VFI1Y",
-            "Region": "JP",
-            "Title": "YOASOBI「Biri-Biri」 Official Music Video",
-            "PublishedAt": "2023-11-18 13:00:09",
-            "Likes": 135773,
-            "TrendingDate": "2023-11-19 00:00:00",
-            "ViewCount": 1859377,
-            "ThumbnailLink": "https://i.ytimg.com/vi/shZyg5VFI1Y/default.jpg",
-            "LikesChange": 135773,
-            "ViewCountChange": 1859377,
-            "ChannelId": "UCvpredjG93ifbCP1Y77JyFA",
-            "ChannelTitle": "Ayase / YOASOBI",
-            "CategoryId": 2,
-            "CategoryTitle": "Music"
+            "VideoId": "b_l1IP_6psY",
+            "Week": "2023-11-12 00:00:00",
+            "Title": "Watch Out (Official Audio) Sidhu Moose Wala | Sikander Kahlon | Mxrci | Latest Punjabi Songs 2023",
+            "ViewCount": 18728566,
+            "Likes": 2276771
         }
     ]
   }
@@ -283,9 +275,27 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   {
     "data": [
         {
-            "value": "2023-10-15 00:00:00"
+            "value": "2023-10-15"
         }
     ]
+  }
+  ```
+
+#### isFavorite
+- Description
+  Given `UserId` and `VideoId`, check whether the user has a favorite video with `VideoId`
+- Type: `GET`
+- Sample request body
+  ```json
+  {
+    "VideoId": "shZyg5VFI1Y",
+    "UserId": "2"
+  }
+  ```
+- Sample response body
+  ```json
+  {
+    "data": true
   }
   ```
 
@@ -397,47 +407,35 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
     "data": [
         {
             "VideoId": "chIqaTzttWE",
-            "Region": "JP",
+            "Region": [
+                "JP"
+            ],
             "Title": "【大公開】くろのわのマネージャーってどんな仕事してるの？  #くろなん",
             "PublishedAt": "2023-11-13 10:00:08",
-            "Likes": 18192,
-            "TrendingDate": "2023-11-18 00:00:00",
-            "ViewCount": 426683,
+            "Likes": 19932,
+            "TrendingDate": "2023-11-24 00:00:00",
+            "ViewCount": 501009,
             "ThumbnailLink": "https://i.ytimg.com/vi/chIqaTzttWE/default.jpg",
-            "LikesChange": 3638,
-            "ViewCountChange": 85337,
+            "LikesChange": 168,
+            "ViewCountChange": 7783,
             "ChannelId": "UCz6vnIbgiqFT9xUcD6Bp65Q",
             "ChannelTitle": "ChroNoiR",
             "CategoryId": 0,
             "CategoryTitle": "Film & Animation"
         },
         {
-            "VideoId": "hf7526IRvpo",
-            "Region": "JP",
-            "Title": "「陰の実力者になりたくて！ 2nd season」 第7話予告≪ノーマルVer.≫「大切なもの」",
-            "PublishedAt": "2023-11-10 08:00:31",
-            "Likes": 12205,
-            "TrendingDate": "2023-11-18 00:00:00",
-            "ViewCount": 714055,
-            "ThumbnailLink": "https://i.ytimg.com/vi/hf7526IRvpo/default.jpg",
-            "LikesChange": 1526,
-            "ViewCountChange": 89257,
-            "ChannelId": "UCY5fcqgSrQItPAX_Z5Frmwg",
-            "ChannelTitle": "KADOKAWAanime",
-            "CategoryId": 0,
-            "CategoryTitle": "Film & Animation"
-        },
-        {
             "VideoId": "kEc6IegVHas",
-            "Region": "JP",
+            "Region": [
+                "JP"
+            ],
             "Title": "劇場版『機動戦士ガンダムSEED FREEDOM』第4弾PV",
             "PublishedAt": "2023-11-19 10:30:16",
-            "Likes": 11717,
-            "TrendingDate": "2023-11-20 00:00:00",
-            "ViewCount": 650634,
+            "Likes": 13592,
+            "TrendingDate": "2023-11-24 00:00:00",
+            "ViewCount": 1016623,
             "ThumbnailLink": "https://i.ytimg.com/vi/kEc6IegVHas/default.jpg",
-            "LikesChange": 11717,
-            "ViewCountChange": 650634,
+            "LikesChange": 334,
+            "ViewCountChange": 73062,
             "ChannelId": "UC7wu64jFsV02bbu6UHUd7JA",
             "ChannelTitle": "ガンダムチャンネル",
             "CategoryId": 0,
@@ -457,7 +455,7 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   ```json
   {
     "SelectedColumn": "Title", [Title | ChannelTitle]
-    "CategoryId": 20,
+    "CategoryId": 0,
     "Region": "JP",
     "SortBy": "likes" [Likes | ViewCount]
   }
@@ -467,24 +465,22 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
   {
     "data": [
         {
-            "Title": "【阿鼻叫喚】鼻毛綱引きで最強の男を決めろ！？！？",
-            "ViewCount": 149143,
-            "Likes": 12776
+            "Id": "chIqaTzttWE",
+            "Title": "【大公開】くろのわのマネージャーってどんな仕事してるの？  #くろなん",
+            "ViewCount": 484380,
+            "Likes": 19524
         },
         {
-            "Title": "神域リーグ2023 エキシビションマッチ",
-            "ViewCount": 280960,
-            "Likes": 4754
+            "Id": "vvuD5bPYimU",
+            "Title": "映画『ゴジラ-1.0』公開記念特番 Behind the scenes -No.30-ト云フモノ",
+            "ViewCount": 902955,
+            "Likes": 10903
         },
         {
-            "Title": "【原神】新星5キャラ　フリーナ解説　全体ダメージバフ持ちの神サポート！【げんしん】",
-            "ViewCount": 256720,
-            "Likes": 4065
-        },
-        {
-            "Title": "VALORANT - CRカップ顔合わせよりもスクリムよりもなぜかキリンに夢中なチームがあるらしい w/ 獅子堂あかり 善悪菌 VanilLa ボドカ 夢野あかり",
-            "ViewCount": 184904,
-            "Likes": 3586
+            "Id": "bgvNjZ7uvOU",
+            "Title": "映画『首』 90秒予告編",
+            "ViewCount": 259698,
+            "Likes": 565
         }
     ]
   }
