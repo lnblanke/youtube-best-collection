@@ -899,13 +899,14 @@ const Home = () => {
                                     itemLayout="vertical"
                                     size="large"
                                     pagination={{
-                                        defaultPageSize: 6,
+                                        defaultPageSize: 8,
+                                        pageSizeOptions: [5, 8, 10, 20]
                                     }}
                                     dataSource={week_weekly}
                                     renderItem={(item) => (
                                         <List.Item key={item.VideoId} style={{textAlign: 'left'}}>
                                             <Flex direction="horizontal">
-                                                <Image width={'20vw'} height={'20.5vh'} preview={false} src={item.ThumbnailLink}/>
+                                                <Image style={{objectFit: "cover", width: "15vw", height: "8vw"}} preview={false} src={item.ThumbnailLink}/>
                                                 <Space size={'3vh'} direction="vertical" wrap>
                                                     <Title level={4} style={{
                                                         margin: '1vw',
