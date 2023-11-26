@@ -97,7 +97,9 @@ const Home = () => {
             title: "Weekly Best",
             dataIndex: ["Title", "VideoId"],
             key: "weekly_best",
-            render: (_, row) => <a href = {`https://www.youtube.com/watch?v=${row.VideoId}`} target="_blank" style = {{color: "black"}}> {row.Title} </a>
+            render: (_, row) => <a href = {`https://www.youtube.com/watch?v=${row.VideoId}`} target="_blank" style = {{color: "black"}}> {row.Title} </a>,
+            // textWrap: "word-break"
+
         },
         {
             title: "Views",
@@ -108,7 +110,7 @@ const Home = () => {
             title: "Likes",
             dataIndex: "Likes",
             key: "likes",
-        },
+        }
     ]
     const headerStyle = {
         textAlign: 'center',
@@ -684,8 +686,9 @@ const Home = () => {
                             </Space>
                             <Table
                                 style={{
-                                    marginTop: '1vh'
+                                    marginTop: '1vh',
                                 }}
+                                tableLayout="fixed"
                                 columns={weekly_best}
                                 dataSource={weekly_best_table}
                                 rowKey="Title"

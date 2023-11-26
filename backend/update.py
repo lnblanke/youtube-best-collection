@@ -6,7 +6,7 @@ import json
 from utils import get_connection, get_request_body, query
 import yaml
 
-cnx = get_connection(yaml.safe_load(open("config.yaml"))["database"])
+cnx = get_connection(yaml.safe_load(open("/opt/config.yaml"))["database"])
 cursor = cnx.cursor()
 
 category_id_mapping = {}
@@ -88,6 +88,8 @@ def update_videos(path, time):
                     cursor.execute("insert ignore into TagOf(VideoId, Tag) values " + ", ".join(insert_tags))
 
                 # Compute last week data
+                cursor.execute("update Video set TrendingCount = 0, WeeklyViewCountChange = 0, WeeklyLikesChange = 0 where TrendingCount > 0")
+                
                 now = datetime.now()
                 cur_week_start = now - timedelta(days = (now.weekday() + 1) % 7,
                                                  hours = now.hour,
@@ -115,7 +117,7 @@ def update_videos(path, time):
                         pass
 
 def update_db(path):
-    time = query("select max(UpdateTime) from Config where UpdateItem = 'Video' and Status <> 'F'")[0][0]
+    time = query("select max(UpdateTime) from Config where Status <> 'F' and UpdateItem = 'Video'")[0][0]
 
     if time is None:
         time = datetime.strptime("2023-09-01 00:00:00", "%Y-%m-%d %H:%M:%S")
@@ -123,13 +125,15 @@ def update_db(path):
     if datetime.now() - time < timedelta(days = 1):
         return
     
-    cur_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    query(f"insert into Config(UpdateItem, UpdateTime, Status) values ('Video', timestamp('{cur_time}'), 'I')")
-
-    try: 
+    now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    query(f"insert into Config(UpdateItem, UpdateTime, Status) values ('Video', timestamp('{now_str}'), 'I')")
+    
+    try:
         api = KaggleApi()
         api.authenticate()
         api.dataset_download_files(dataset = "rsrishav/youtube-trending-video-dataset", path = path, unzip = True)
+
+        cursor.execute("start transaction read write")
 
         update_category(path)
         update_videos(path, time)
@@ -138,52 +142,56 @@ def update_db(path):
             for file in files:
                 os.remove(path + file)
         os.rmdir(path)
-    except Exception as e:
-        query(f"update Config set Status = 'F' where UpdateItem = 'Video' and UpdateTime = timestamp('{cur_time}')")
-        raise e
 
-    query(f"update Config set Status = 'S' where UpdateItem = 'Video' and UpdateTime = timestamp('{cur_time}')")
+        cursor.execute("commit")
+        query(f"update Config set Status = 'S' where UpdateItem = 'Video' and UpdateTime = timestamp('{now_str}')")
+    except Exception as e:
+        cursor.execute("rollback")
+        e = e.replace("\"", "\\\"").replace("\\", "\\\\")
+        query(f"update Config set Status = 'F', Extra = \"{e}\" where UpdateItem = 'Video' and UpdateTime = timestamp('{now_str}')")
 
 def update_weekly_best(Week: datetime):
     max_week = query("select max(Week) from Week")[0][0]
 
     if max_week is not None and datetime.strftime(max_week, '%Y-%m-%d %H:%M:%S') >= datetime.strftime(Week, '%Y-%m-%d %H:%M:%S'):
         return
-
-    sql_select = f"""SELECT VideoId, sum(TrendingCount * 1000000 * Weight) + 10 * sum(WeeklyLikesChange) / 11 + sum(WeeklyViewCountChange) / 11 as Score
-                    FROM Video NATURAL JOIN RegionWeight 
-                    WHERE TrendingCount > 0 AND VideoId NOT IN (select VideoId from WeeklyBest)
-                    GROUP BY VideoId
-                    ORDER BY Score DESC 
-                    LIMIT 10"""
-
-    videos = query(sql_select)
-
-    for video in videos:
-        video_id = video[0]
-        sql_insert = f"INSERT INTO WeeklyBest (VideoId, Week) VALUES ('{video_id}', timestamp('{datetime.strftime(Week, '%Y-%m-%d %H:%M:%S')}'))"
-        query(sql_insert)
-
-def lambda_handler(event, context):
-    error = None
-    path = yaml.safe_load(open("/opt/config.yaml"))["data"]["path"]
+    
+    now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    query(f"insert into Config(UpdateItem, UpdateTime, Status) values ('WeeklyBest', timestamp('{now_str}'), 'I')")
 
     try:
+        sql_select = f"""SELECT VideoId, sum(TrendingCount * 1000000 * Weight) + 10 * sum(WeeklyLikesChange) / 11 + sum(WeeklyViewCountChange) / 11 as Score
+                        FROM Video NATURAL JOIN RegionWeight 
+                        WHERE TrendingCount > 0 AND VideoId NOT IN (select VideoId from WeeklyBest)
+                        GROUP BY VideoId
+                        ORDER BY Score DESC 
+                        LIMIT 10"""
+
+        videos = query(sql_select)
+
         cursor.execute("start transaction read write")
-        update_db(path)
 
-        now = datetime.now()
-
-        update_weekly_best(now - timedelta(days = (now.weekday() + 1) % 7 + 7,
-                                     hours = now.hour,
-                                     minutes = now.minute,
-                                     seconds = now.second))
+        for video in videos:
+            video_id = video[0]
+            sql_insert = f"INSERT INTO WeeklyBest (VideoId, Week) VALUES ('{video_id}', timestamp('{datetime.strftime(Week, '%Y-%m-%d %H:%M:%S')}'))"
+            cursor.execute(sql_insert)
+        
         cursor.execute("commit")
-        cursor.close()
+        query(f"update Config set Status = 'S' where UpdateItem = 'WeeklyBest' and UpdateTime = timestamp('{now_str}')")
     except Exception as e:
-        error = e
         cursor.execute("rollback")
+        e = e.replace("\"", "\\\"").replace("\\", "\\\\")
+        query(f"update Config set Status = 'F', Extra = \"{e}\" where UpdateItem = 'WeeklyBest' and UpdateTime = timestamp('{now_str}')")
 
-    return get_request_body("PUT", None, error) 
+def lambda_handler(event, context):
+    path = yaml.safe_load(open("/opt/config.yaml"))["data"]["path"]
+    
+    now = datetime.now()
 
-print(lambda_handler(None, None))
+    update_db(path)
+    update_weekly_best(now - timedelta(days = (now.weekday() + 1) % 7 + 7,
+                                       hours = now.hour,
+                                       minutes = now.minute,
+                                       seconds = now.second))
+
+    cursor.close()
