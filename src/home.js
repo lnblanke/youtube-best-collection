@@ -896,7 +896,7 @@ const Home = () => {
                                     itemLayout="vertical"
                                     size="large"
                                     pagination={{
-                                        pageSize: 6,
+                                        defaultPageSize: 6,
                                     }}
                                     dataSource={week_weekly}
                                     renderItem={(item) => (
