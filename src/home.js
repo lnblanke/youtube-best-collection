@@ -927,11 +927,13 @@ const Home = () => {
                                                              onClick={() => {
                                                                  setChannel_main(item.ChannelId);
                                                                  setCurrent_channel(item.ChannelTitle);
+                                                                 window.scroll({top: 0, behavior: "smooth"});
                                                              }}>
                                                             {item.ChannelTitle}
                                                         </Tag>
                                                         <Tag bordered={false} color="cyan" style={{margin: '0.2vw', fontFamily: 'Arial'}} onClick={() => {
                                                             setCategory_main(item.CategoryId);
+                                                            window.scroll({top: 0, behavior: "smooth"});
                                                         }}>
                                                             {item.CategoryTitle}
                                                         </Tag>
@@ -939,6 +941,7 @@ const Home = () => {
                                                             item.Region ? item.Region.map(region =>
                                                                 <Tag key={region} bordered={false} color="orange" style = {{margin: "0.2vw"}} onClick={() => {
                                                                     setRegion_main(region);
+                                                                    window.scroll({top: 0, behavior: "smooth"});
                                                                 }}>
                                                                     {region}
                                                                 </Tag>
