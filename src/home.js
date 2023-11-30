@@ -900,7 +900,8 @@ const Home = () => {
                                     size="large"
                                     pagination={{
                                         defaultPageSize: 8,
-                                        pageSizeOptions: [5, 8, 10, 20]
+                                        pageSizeOptions: [5, 8, 10, 20],
+                                        onChange: () => window.scroll({top: 0, behavior: "smooth"})
                                     }}
                                     dataSource={week_weekly}
                                     renderItem={(item) => (
