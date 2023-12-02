@@ -14,7 +14,7 @@ import {
 } from "antd";
 import {useNavigate} from "react-router-dom";
 
-const baseurl = "https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/dev/";
+const baseurl = "https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/prod/";
 
 function Register() {
     const [messageApi, contextHolder] = message.useMessage(); // 页面上方提示话框

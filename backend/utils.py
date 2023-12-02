@@ -15,10 +15,15 @@ def get_connection(database_config):
 def query(query):
     cnx = get_connection(yaml.safe_load(open("config.yaml"))["database"])
     cursor = cnx.cursor()
-    cnx.start_transaction
-    cursor.execute(query)
 
     select = (query[:6].lower() == "select")
+
+    if select:
+        cursor.execute("start transaction read only")
+    else:
+        cursor.execute("start transaction write read")
+
+    cursor.execute(query)
 
     if select:
         result = cursor.fetchall()

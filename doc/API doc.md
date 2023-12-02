@@ -188,19 +188,7 @@ Production environment: `https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/
     "data": [
         {
             "VideoId": "shZyg5VFI1Y",
-            "Region": "JP",
-            "Title": "YOASOBI「Biri-Biri」 Official Music Video",
-            "PublishedAt": "2023-11-18 13:00:09",
-            "Likes": 135773,
-            "TrendingDate": "2023-11-19 00:00:00",
-            "ViewCount": 1859377,
-            "ThumbnailLink": "https://i.ytimg.com/vi/shZyg5VFI1Y/default.jpg",
-            "LikesChange": 135773,
-            "ViewCountChange": 1859377,
-            "ChannelId": "UCvpredjG93ifbCP1Y77JyFA",
-            "ChannelTitle": "Ayase / YOASOBI",
-            "CategoryId": 2,
-            "CategoryTitle": "Music"
+            "Title": "YOASOBI「Biri-Biri」 Official Music Video"
         }
     ]
   }

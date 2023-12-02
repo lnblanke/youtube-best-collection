@@ -13,7 +13,7 @@ import {
 import { NavLink, useNavigate} from "react-router-dom";
 import axios from "axios";
 
-const baseurl = "https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/dev/";
+const baseurl = "https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/prod/";
 
 const Login = () => {
     const [messageApi, contextHolder] = message.useMessage(); // 页面上方提示话框
