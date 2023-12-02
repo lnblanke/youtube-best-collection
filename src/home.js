@@ -32,8 +32,8 @@ import {
 import axios from "axios";
 import {NavLink, useNavigate, useLocation} from "react-router-dom";
 
-const baseurl = "https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/dev/";
-const uploadurl = "https://xpu7xvvdcg.execute-api.us-east-2.amazonaws.com/dev/user-avatars-bucket/"
+const baseurl = "https://6cbpmuhemh.execute-api.us-east-2.amazonaws.com/prod/";
+const uploadurl = "https://xpu7xvvdcg.execute-api.us-east-2.amazonaws.com/prod/user-avatars-bucket/"
 
 const Home = () => {
     const [messageApi, contextHolder] = message.useMessage(); // 页面上方提示话框
@@ -434,7 +434,9 @@ const Home = () => {
                                     <List.Item key={item.VideoId} style={{textAlign: 'left'}}>
                                         <Space direction='horizontal'>
                                             <div>
-                                                {item.Title}
+                                                <a href = {`https://www.youtube.com/watch?v=${item.VideoId}`} target="_blank" style = {{color: "black"}}>
+                                                    {item.Title}
+                                                </a>
                                             </div>
                                             <div style={{fontFamily: 'Orbitron', color: 'red'}} onClick={() => {
                                                 axios.delete(`${baseurl}favoriteDelete?VideoId=${item.VideoId}&UserId=${userId}`, {
