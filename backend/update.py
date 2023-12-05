@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import os
 import pandas as pd
 import json
-from utils import get_connection, get_request_body, query
+from utils import get_connection, query
 import yaml
 
 cnx = get_connection(yaml.safe_load(open("/opt/config.yaml"))["database"])

@@ -1,5 +1,6 @@
 import json
-from utils import query, get_request_body
+from utils import query, get_request_body, get_connection
+import yaml
 
 def lambda_handler(event, context):
     outputs, error = None, None
@@ -20,23 +21,24 @@ def lambda_handler(event, context):
         
         region = query(f"select Region from Video where Region = '{Region}'")
         assert len(region) > 0, "Region does not exist"
-        
-        if SelectedColumn.lower() == "title":
-            SelectedColumn = "VideoId, Title"
-        else:
-            SelectedColumn = "ChannelId, ChannelTitle"
     
-        result = query(f"select {SelectedColumn}, ViewCount, Likes from Video natural join Channel where CategoryId = '{CategoryId}' and Region = '{Region}' and TrendingDate = (select max(TrendingDate) from Video) group by {SelectedColumn} order by {SortBy} DESC limit 10")
+        cnx = get_connection(yaml.safe_load(open("/opt/config.yaml"))["database"])
+        cursor = cnx.cursor()
+    
+        cursor.callproc("top_ten_procedure", (CategoryId, Region, SelectedColumn.lower(), SortBy))
     
         outputs = []
     
-        for [Id, title, viewcount, likes] in result:
-            outputs.append({
-                "Id": Id,
-                "Title": title,
-                "ViewCount": viewcount,
-                "Likes": likes
-            })
+        for result in cursor.stored_results():
+            for [Id, title, viewcount, likes] in result.fetchall():
+                outputs.append({
+                    "Id": Id,
+                    "Title": title,
+                    "ViewCount": viewcount,
+                    "Likes": likes
+                })
+                
+        cursor.close()
     except Exception as e:
         error = e
 

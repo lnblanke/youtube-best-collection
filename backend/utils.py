@@ -13,7 +13,7 @@ def get_connection(database_config):
     return cnx
 
 def query(query):
-    cnx = get_connection(yaml.safe_load(open("config.yaml"))["database"])
+    cnx = get_connection(yaml.safe_load(open("/opt/config.yaml"))["database"])
     cursor = cnx.cursor()
 
     select = (query[:6].lower() == "select")
@@ -23,11 +23,16 @@ def query(query):
     else:
         cursor.execute("start transaction write read")
 
-    cursor.execute(query)
+    try:
+        cursor.execute(query)
 
-    if select:
-        result = cursor.fetchall()
-    cnx.commit()
+        if select:
+            result = cursor.fetchall()
+
+        cursor.execute("commit")
+    except:
+        cursor.execute("rollback")
+
     cursor.close()
 
     return result if select else None
