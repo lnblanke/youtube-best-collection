@@ -172,6 +172,7 @@ const Home = () => {
                     messageApi.info("Change Successfully");
                     form_modal.resetFields();
                     setModal_status(0);
+                    window.location.reload();
                 });
             }).catch(error => {
                 if (form_modal.getFieldValue("userPassword").length < 8) {
@@ -221,14 +222,14 @@ const Home = () => {
         if (!isJpg && !isPng) {
             message.error('You can only upload JPG/PNG file!');
         }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
+        const isLt10M = file.size / 1024 / 1024 < 10;
+        if (!isLt10M) {
+            message.error('Image must smaller than 10MB!');
         }
 
         setUpload_file_type(isJpg ? ".jpg" : ".png");
 
-        return (isJpg || isPng) && isLt2M;
+        return (isJpg || isPng) && isLt10M;
     }
 
     const getBase64 = (img, callback) => {
@@ -303,7 +304,6 @@ const Home = () => {
 
     React.useEffect(() => {
         if (userInfo.data && login_status === 0) {
-            messageApi.info("Login Successfully");
             setUserName(userInfo.data);
             axios.get(`${baseurl}getUserInfo?UserName=${userInfo.data}`, {
                 headers: {
@@ -489,7 +489,7 @@ const Home = () => {
                        form_modal.resetFields();
                    }}>
                 <Form form={form_modal}>
-                    <ImgCrop rotationSlider>
+                    <ImgCrop cropShape = "round">
                         <Upload
                             name="avatar"
                             listType="picture-circle"
@@ -518,7 +518,8 @@ const Home = () => {
                                     src={userAvatar}
                                     alt="avatar"
                                     style={{
-                                        width: '100%',
+                                        width: '101%',
+                                        borderRadius: "50%"
                                     }}
                                 />
                             ) : (
@@ -909,7 +910,10 @@ const Home = () => {
                                     renderItem={(item) => (
                                         <List.Item key={item.VideoId} style={{textAlign: 'left'}}>
                                             <Flex direction="horizontal">
-                                                <Image style={{objectFit: "cover", width: "15vw", height: "8vw"}} preview={false} src={item.ThumbnailLink}/>
+                                                <Image
+                                                    style={{objectFit: "cover", width: "15vw", height: "8vw", borderRadius: "10px"}}
+                                                    preview={false}
+                                                    src={item.ThumbnailLink}/>
                                                 <Space size={'3vh'} direction="vertical" wrap>
                                                     <Title level={4} style={{
                                                         margin: '1vw',
