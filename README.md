@@ -1,6 +1,4 @@
-# YouTube Best Collection - Team083 EdgeRunners
-
-The team project of CS 411 for Team 083
+# YouTube Best Collection
 
 ### Introduction
 
